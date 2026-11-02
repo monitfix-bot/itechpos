@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { LoginForm } from "./login-form";
-import { Laptop, ShieldCheck, Moon } from "lucide-react";
+import { Laptop, ShieldCheck } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getSettings } from "@/lib/settings";
@@ -43,7 +43,7 @@ export default async function LoginPage() {
           <div className="px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 shadow-2xs flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="font-mono text-xs font-semibold text-slate-600 dark:text-slate-300">
-              Offline Local • Sẵn sàng
+              Hệ thống • Trực tuyến
             </span>
           </div>
           <ThemeToggle />
@@ -62,7 +62,7 @@ export default async function LoginPage() {
               Đăng nhập hệ thống
             </h1>
             <p className="text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 leading-relaxed max-w-[340px] mx-auto">
-              Nhập thông tin tài khoản hoặc bấm chọn nhanh vai trò kiểm thử để bắt đầu ca làm việc.
+              Vui lòng nhập thông tin tài khoản để bắt đầu ca làm việc.
             </p>
           </div>
 
@@ -74,7 +74,7 @@ export default async function LoginPage() {
           {/* Security footnote */}
           <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-1.5 text-[11px] text-slate-400 font-medium text-center">
             <ShieldCheck className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span>Dữ liệu lưu trữ cục bộ SQLite an toàn tuyệt đối</span>
+            <span>Hệ thống bảo mật & mã hóa dữ liệu chuẩn doanh nghiệp</span>
           </div>
         </div>
       </main>
