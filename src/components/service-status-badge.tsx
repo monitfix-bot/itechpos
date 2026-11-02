@@ -3,39 +3,42 @@ import { cn } from "@/lib/utils";
 
 const STATUS_MAP: Record<
   string,
-  { label: string; className: string }
+  { label: string; className: string; dotColor: string }
 > = {
   received: {
     label: "Tiếp nhận",
-    className: "bg-blue-100 text-blue-700 hover:bg-blue-100 border-blue-200",
+    className: "bg-sky-50 text-sky-700 border-sky-200 font-medium",
+    dotColor: "bg-sky-500",
   },
   diagnosing: {
     label: "Chẩn đoán",
-    className:
-      "bg-purple-100 text-purple-700 hover:bg-purple-100 border-purple-200",
+    className: "bg-amber-50 text-amber-800 border-amber-200 font-medium",
+    dotColor: "bg-amber-500 animate-pulse",
   },
   waiting_parts: {
     label: "Chờ linh kiện",
-    className:
-      "bg-amber-100 text-amber-800 hover:bg-amber-100 border-amber-200",
+    className: "bg-orange-50 text-orange-800 border-orange-200 font-medium",
+    dotColor: "bg-orange-500",
   },
   repairing: {
     label: "Đang sửa",
-    className:
-      "bg-orange-100 text-orange-800 hover:bg-orange-100 border-orange-200",
+    className: "bg-blue-50 text-blue-700 border-blue-200 font-medium",
+    dotColor: "bg-blue-600 animate-pulse",
   },
   completed: {
-    label: "Hoàn tất",
-    className:
-      "bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-emerald-200",
+    label: "Đã sửa xong",
+    className: "bg-emerald-50 text-emerald-700 border-emerald-200 font-medium",
+    dotColor: "bg-emerald-500",
   },
   delivered: {
     label: "Đã trả máy",
-    className: "bg-zinc-100 text-zinc-700 hover:bg-zinc-100 border-zinc-200",
+    className: "bg-slate-100 text-slate-700 border-slate-300 font-medium",
+    dotColor: "bg-slate-500",
   },
   cancelled: {
     label: "Đã huỷ",
-    className: "bg-red-100 text-red-700 hover:bg-red-100 border-red-200",
+    className: "bg-rose-50 text-rose-700 border-rose-200 font-medium",
+    dotColor: "bg-rose-500",
   },
 };
 
@@ -46,9 +49,21 @@ export function ServiceStatusBadge({
   status: string;
   className?: string;
 }) {
-  const s = STATUS_MAP[status] || { label: status, className: "" };
+  const s = STATUS_MAP[status] || {
+    label: status,
+    className: "bg-slate-100 text-slate-700 border-slate-200",
+    dotColor: "bg-slate-400",
+  };
   return (
-    <Badge variant="outline" className={cn("border", s.className, className)}>
+    <Badge
+      variant="outline"
+      className={cn(
+        "inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs rounded-md shadow-xs transition-colors",
+        s.className,
+        className
+      )}
+    >
+      <span className={cn("size-1.5 rounded-full shrink-0", s.dotColor)} />
       {s.label}
     </Badge>
   );

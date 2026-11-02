@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { formatVND, formatDateTime } from "@/lib/format";
+import { formatVND } from "@/lib/format";
 import {
   PrintReceiptShell,
 } from "@/components/print-receipt-shell";
@@ -59,7 +59,8 @@ export default async function ServiceIntakePrintPage({
     dia_chi_cua_hang: settings.shopAddress || "",
     sdt_cua_hang: settings.shopPhone || "",
     ma_phieu: ticket.code,
-    ngay_tao: formatDateTime(ticket.receivedAt),
+    ngay_tao: ticket.receivedAt,
+    timezone: settings.timezone,
     ten_khach: ticket.customer.name,
     sdt_khach: ticket.customer.phone,
     dia_chi_khach: ticket.customer.address,
@@ -68,13 +69,22 @@ export default async function ServiceIntakePrintPage({
     hang: ticket.deviceBrand || "",
     model: ticket.deviceModel || "",
     imei: ticket.imei,
+    imei_serial: ticket.imei,
+    phu_kien: ticket.accessories,
+    accessories: ticket.accessories,
     tinh_trang: ticket.appearance,
+    tinh_trang_may: ticket.appearance,
     loi_yeu_cau: ticket.problem,
-    hen_tra: ticket.promisedAt ? formatDateTime(ticket.promisedAt) : "",
+    yeu_cau_khach: ticket.problem,
+    hen_tra: ticket.promisedAt,
+    ngay_hen_tra: ticket.promisedAt,
     tam_tinh: ticket.estimatedCost,
+    du_kien_chi_phi: ticket.estimatedCost,
     da_thanh_toan: ticket.deposit,
     da_dat_coc: ticket.deposit,
+    tien_dat_coc: ticket.deposit,
     ten_nhan_vien: ticket.createdBy.name,
+    ktv_phu_trach: ticket.createdBy.name,
     ghi_chu: ticket.note || "",
     bank_id: settings.bankId,
     bank_account: settings.bankAccount,

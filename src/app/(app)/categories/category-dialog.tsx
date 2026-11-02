@@ -144,8 +144,8 @@ export function CategoryDialog({
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <div className="rounded-xl bg-blue-50/50 border border-blue-100 p-4">
-             <p className="text-[11px] text-blue-600 leading-relaxed">
+          <div className="rounded-xl bg-primary/10 border border-primary/20 p-4">
+             <p className="text-[11px] text-primary leading-relaxed">
                <strong>Lưu ý:</strong> Danh mục giúp bạn nhóm sản phẩm. <br/>
                Hãy chọn <strong>Phân loại hệ thống</strong> đúng để phần mềm tự động hiển thị các trường dữ liệu phù hợp (như IMEI cho điện thoại, hoặc các trường kỹ thuật cho sửa chữa).
              </p>

@@ -18,6 +18,7 @@ import {
   ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { playPosSound } from "@/lib/sound";
 import { PosClient } from "./pos-client";
 import { ServiceForm } from "../service/service-form";
 import { TicketTab } from "./ticket-tab";
@@ -174,59 +175,131 @@ export function WorkspaceClient({
     router.refresh();
   }
 
+    function triggerShortcut(key: "F2" | "F4" | "F9") {
+    playPosSound("tab");
+    window.dispatchEvent(new CustomEvent("pos-shortcut", { detail: key }));
+  }
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "F2") {
+        e.preventDefault();
+        triggerShortcut("F2");
+      } else if (e.key === "F4") {
+        e.preventDefault();
+        triggerShortcut("F4");
+      } else if (e.key === "F9") {
+        e.preventDefault();
+        triggerShortcut("F9");
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <div className="space-y-4">
-      <div className="bg-card/65 backdrop-blur-sm border border-border/80 rounded-2xl p-1.5 shadow-sm flex items-center gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {tabs.map((tab) => (
-          <div key={tab.id} className="relative flex-shrink-0 group">
-            <button
-              type="button"
-              onClick={() => setActiveId(tab.id)}
-              className={cn(
-                "flex items-center gap-2 px-4 h-9 rounded-xl text-xs font-bold transition-all duration-200 pr-10",
-                activeId === tab.id
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                  : "text-muted-foreground hover:bg-muted/80 hover:text-foreground"
-              )}
-            >
-              {tab.type === "sale" ? (
-                <ShoppingCart className="size-3.5" />
-              ) : tab.type === "service" ? (
-                <Wrench className="size-3.5" />
-              ) : (
-                <ClipboardList className="size-3.5" />
-              )}
-              <span>{tab.label}</span>
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                closeTab(tab.id);
-              }}
-              className={cn(
-                "absolute right-2 top-1/2 -translate-y-1/2 size-6 rounded-lg flex items-center justify-center transition-all",
-                activeId === tab.id
-                  ? "bg-white/20 text-white hover:bg-white/30"
-                  : "bg-transparent text-muted-foreground hover:bg-red-500/10 hover:text-red-500"
-              )}
-              aria-label="Đóng tab"
-            >
-              <X className="size-3" />
-            </button>
-          </div>
-        ))}
-        <div className="h-6 w-px bg-border/60 mx-1" />
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="h-9 px-4 rounded-xl gap-2 font-bold hover:bg-primary/10 hover:text-primary transition-all shrink-0"
-          onClick={() => setOpenAdd(true)}
-        >
-          <Plus className="size-4" />
-          <span>Tab mới</span>
-        </Button>
+      {/* 2. MULTI-ORDER & REPAIR TABS BAR (THANH TAB ĐA NHIỆM: ĐƠN BÁN + PHIẾU SỬA) */}
+      <div className="bg-slate-200/75 dark:bg-slate-900/90 backdrop-blur-md p-1.5 rounded-2xl border border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex items-center gap-1.5 flex-nowrap shrink-0">
+          {tabs.map((tab) => {
+            const isActive = activeId === tab.id;
+            const isDirty = dirtyTabs[tab.id];
+            const isRepair = tab.type === "service";
+            return (
+              <div
+                key={tab.id}
+                onClick={() => {
+                  setActiveId(tab.id);
+                  playPosSound("tab");
+                }}
+                className={cn(
+                  "group flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs select-none transition-all cursor-pointer shrink-0",
+                  isActive
+                    ? isRepair
+                      ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-extrabold shadow-sm border-2 border-amber-500/80"
+                      : "bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-extrabold shadow-sm border-2 border-blue-500/80"
+                    : "bg-transparent hover:bg-white/60 dark:hover:bg-slate-800/60 text-slate-600 dark:text-slate-400 font-semibold"
+                )}
+              >
+                <div className="flex items-center gap-2">
+                  {tab.type === "sale" ? (
+                    <ShoppingCart className="size-3.5 text-blue-600 dark:text-blue-400" />
+                  ) : tab.type === "service" ? (
+                    <Wrench className="size-3.5 text-amber-500" />
+                  ) : (
+                    <ClipboardList className="size-3.5 text-emerald-500" />
+                  )}
+                  <span>{tab.label}</span>
+                  {isDirty && (
+                    <span className="size-1.5 rounded-full bg-amber-500 animate-pulse" title="Có thay đổi chưa lưu" />
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    closeTab(tab.id);
+                  }}
+                  className="opacity-50 hover:opacity-100 hover:text-rose-500 p-0.5 rounded transition-all"
+                  aria-label="Đóng tab"
+                >
+                  <X className="size-3" />
+                </button>
+              </div>
+            );
+          })}
+
+          {/* Nút + Thêm tab (mở modal chọn loại tab như cũ) */}
+          <button
+            type="button"
+            onClick={() => {
+              setOpenAdd(true);
+              playPosSound("tab");
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white/70 dark:hover:bg-slate-800/70 transition-all shrink-0 active:scale-95"
+          >
+            <Plus className="size-3.5" />
+            <span>Thêm tab mới</span>
+          </button>
+        </div>
+
+        {/* Phím tắt nhanh bên phải thanh Tab (Nhấn hoặc click trực tiếp) */}
+        <div className="hidden lg:flex items-center gap-3 pr-2.5 text-[11px] text-slate-500 dark:text-slate-400 shrink-0">
+          <button
+            type="button"
+            onClick={() => triggerShortcut("F2")}
+            className="flex items-center gap-1.5 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer group"
+            title="Nhấn F2 trên bàn phím hoặc click để tìm kiếm hàng"
+          >
+            <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-800 rounded-md border border-slate-300 dark:border-slate-700 font-mono text-[10px] font-bold shadow-2xs group-hover:border-blue-400 transition-colors">
+              F2
+            </kbd>
+            <span className="font-semibold">Tìm hàng</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => triggerShortcut("F4")}
+            className="flex items-center gap-1.5 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer group"
+            title="Nhấn F4 trên bàn phím hoặc click để chọn khách hàng"
+          >
+            <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-800 rounded-md border border-slate-300 dark:border-slate-700 font-mono text-[10px] font-bold shadow-2xs group-hover:border-blue-400 transition-colors">
+              F4
+            </kbd>
+            <span className="font-semibold">Khách hàng</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => triggerShortcut("F9")}
+            className="flex items-center gap-1.5 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer group"
+            title="Nhấn F9 trên bàn phím hoặc click để hoàn tất thanh toán / lưu phiếu"
+          >
+            <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-800 rounded-md border border-slate-300 dark:border-slate-700 font-mono text-[10px] font-bold shadow-2xs group-hover:border-emerald-400 transition-colors">
+              F9
+            </kbd>
+            <span className="font-semibold">Hoàn tất</span>
+          </button>
+        </div>
       </div>
 
       {tabs.map((tab) => (
@@ -236,6 +309,7 @@ export function WorkspaceClient({
         >
           {tab.type === "sale" ? (
             <PosClient
+              isActive={activeId === tab.id}
               products={products}
               categories={categories}
               customers={customers}
@@ -244,6 +318,7 @@ export function WorkspaceClient({
             />
           ) : tab.type === "service" ? (
             <ServiceForm
+              isActive={activeId === tab.id}
               customers={customers}
               technicians={technicians}
               products={products.map((p) => ({
@@ -274,38 +349,38 @@ export function WorkspaceClient({
       ))}
 
       <Dialog open={openAdd} onOpenChange={setOpenAdd}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md border border-border shadow-xl rounded-2xl">
           <DialogHeader>
-            <DialogTitle>Tab mới</DialogTitle>
-            <DialogDescription>
-              Chọn loại giao dịch cho tab mới.
+            <DialogTitle className="text-base font-bold">Mở Tab Giao Dịch Mới</DialogTitle>
+            <DialogDescription className="text-xs">
+              Chọn phân hệ bạn muốn xử lý trên tab làm việc độc lập.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <button
               type="button"
               onClick={() => addTab("sale")}
-              className="rounded-lg border-2 border-border hover:border-primary hover:bg-primary/5 p-5 flex flex-col items-center gap-2 text-center transition-colors"
+              className="rounded-xl border border-border hover:border-primary hover:bg-primary/5 p-4 flex flex-col items-center gap-2.5 text-center transition-all group"
             >
-              <div className="size-12 rounded-full bg-primary/10 text-primary grid place-items-center">
-                <ShoppingCart className="size-6" />
+              <div className="size-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+                <ShoppingCart className="size-5" />
               </div>
-              <div className="font-medium">Bán hàng</div>
-              <div className="text-xs text-muted-foreground">
-                Chọn sản phẩm, thanh toán, in hoá đơn.
+              <div className="font-bold text-xs uppercase tracking-tight text-foreground">Bán hàng (POS)</div>
+              <div className="text-[11px] text-muted-foreground leading-normal">
+                Bán lẻ thiết bị, linh kiện, thanh toán và in hoá đơn tức thì.
               </div>
             </button>
             <button
               type="button"
               onClick={() => addTab("service")}
-              className="rounded-lg border-2 border-border hover:border-primary hover:bg-primary/5 p-5 flex flex-col items-center gap-2 text-center transition-colors"
+              className="rounded-xl border border-border hover:border-amber-600 hover:bg-amber-500/5 p-4 flex flex-col items-center gap-2.5 text-center transition-all group"
             >
-              <div className="size-12 rounded-full bg-primary/10 text-primary grid place-items-center">
-                <Wrench className="size-6" />
+              <div className="size-11 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Wrench className="size-5" />
               </div>
-              <div className="font-medium">Sửa chữa</div>
-              <div className="text-xs text-muted-foreground">
-                Nhận thiết bị, lập phiếu nhận và in cho khách.
+              <div className="font-bold text-xs uppercase tracking-tight text-foreground">Tiếp nhận máy sửa</div>
+              <div className="text-[11px] text-muted-foreground leading-normal">
+                Kiểm tra máy lỗi, lập biên nhận và in phiếu nhận máy cho khách.
               </div>
             </button>
           </div>

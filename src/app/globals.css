@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+
 /* Print & Template Reset */
 .premium-receipt table,
 .premium-receipt tr,
@@ -26,6 +27,7 @@
   border-top: 1px solid #000 !important;
   border-bottom: 1px solid #000 !important;
 }
+
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
@@ -33,8 +35,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -68,79 +70,368 @@
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-xl: calc(var(--radius) * 1.3);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-3xl: calc(var(--radius) * 2.0);
+  --radius-4xl: calc(var(--radius) * 2.4);
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.488 0.18 254);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0.01 254);
-  --secondary-foreground: oklch(0.3 0.05 254);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.96 0.02 254);
-  --accent-foreground: oklch(0.35 0.1 254);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.488 0.18 254);
-  --chart-1: oklch(0.55 0.18 254);
-  --chart-2: oklch(0.65 0.16 165);
-  --chart-3: oklch(0.72 0.18 75);
-  --chart-4: oklch(0.62 0.21 28);
-  --chart-5: oklch(0.55 0.2 305);
+  /* Crisp Modern Studio Palette: Pure Slate & Clean Surfaces */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  
+  /* Precision Cobalt Blue */
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  
+  /* Slate Tones */
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  
+  --destructive: #ef4444;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
+  
+  --chart-1: #2563eb;
+  --chart-2: #10b981;
+  --chart-3: #f59e0b;
+  --chart-4: #ef4444;
+  --chart-5: #6366f1;
+  
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.488 0.18 254);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.96 0.02 254);
-  --sidebar-accent-foreground: oklch(0.35 0.1 254);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.488 0.18 254);
+  
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #2563eb;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Dark OLED Workstation */
+  --background: #090d16;
+  --foreground: #f8fafc;
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+  --popover: #0f172a;
+  --popover-foreground: #f8fafc;
+  
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  
+  --accent: #1e293b;
+  --accent-foreground: #f8fafc;
+  
+  --destructive: #f87171;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #3b82f6;
+  
+  --chart-1: #3b82f6;
+  --chart-2: #34d399;
+  --chart-3: #fbbf24;
+  --chart-4: #f87171;
+  --chart-5: #818cf8;
+  
+  --sidebar: #090d16;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e293b;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #1e293b;
+  --sidebar-ring: #3b82f6;
+}
+
+/* ============================================================
+   SYSTEM THEME COLOR PRESETS
+   ============================================================ */
+
+/* Emerald */
+:root[data-theme="emerald"], [data-theme="emerald"] {
+  --primary: #059669;
+  --primary-foreground: #ffffff;
+  --ring: #059669;
+  --sidebar-primary: #059669;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #059669;
+  --chart-1: #059669;
+}
+.dark[data-theme="emerald"], .dark [data-theme="emerald"] {
+  --primary: #10b981;
+  --primary-foreground: #090d16;
+  --ring: #10b981;
+  --sidebar-primary: #10b981;
+  --sidebar-primary-foreground: #090d16;
+  --sidebar-ring: #10b981;
+  --chart-1: #10b981;
+}
+
+/* Violet / Indigo */
+:root[data-theme="violet"], [data-theme="violet"] {
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --ring: #6366f1;
+  --sidebar-primary: #6366f1;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #6366f1;
+  --chart-1: #6366f1;
+}
+.dark[data-theme="violet"], .dark [data-theme="violet"] {
+  --primary: #818cf8;
+  --primary-foreground: #090d16;
+  --ring: #818cf8;
+  --sidebar-primary: #818cf8;
+  --sidebar-primary-foreground: #090d16;
+  --sidebar-ring: #818cf8;
+  --chart-1: #818cf8;
+}
+
+/* Amber / Orange */
+:root[data-theme="amber"], [data-theme="amber"] {
+  --primary: #d97706;
+  --primary-foreground: #ffffff;
+  --ring: #d97706;
+  --sidebar-primary: #d97706;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #d97706;
+  --chart-1: #d97706;
+}
+.dark[data-theme="amber"], .dark [data-theme="amber"] {
+  --primary: #f59e0b;
+  --primary-foreground: #090d16;
+  --ring: #f59e0b;
+  --sidebar-primary: #f59e0b;
+  --sidebar-primary-foreground: #090d16;
+  --sidebar-ring: #f59e0b;
+  --chart-1: #f59e0b;
+}
+
+/* Rose */
+:root[data-theme="rose"], [data-theme="rose"] {
+  --primary: #e11d48;
+  --primary-foreground: #ffffff;
+  --ring: #e11d48;
+  --sidebar-primary: #e11d48;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #e11d48;
+  --chart-1: #e11d48;
+}
+.dark[data-theme="rose"], .dark [data-theme="rose"] {
+  --primary: #f43f5e;
+  --primary-foreground: #ffffff;
+  --ring: #f43f5e;
+  --sidebar-primary: #f43f5e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #f43f5e;
+  --chart-1: #f43f5e;
+}
+
+/* Cyan */
+:root[data-theme="cyan"], [data-theme="cyan"] {
+  --primary: #0891b2;
+  --primary-foreground: #ffffff;
+  --ring: #0891b2;
+  --sidebar-primary: #0891b2;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #0891b2;
+  --chart-1: #0891b2;
+}
+.dark[data-theme="cyan"], .dark [data-theme="cyan"] {
+  --primary: #06b6d4;
+  --primary-foreground: #090d16;
+  --ring: #06b6d4;
+  --sidebar-primary: #06b6d4;
+  --sidebar-primary-foreground: #090d16;
+  --sidebar-ring: #06b6d4;
+  --chart-1: #06b6d4;
+}
+
+/* Slate / Minimal Black */
+:root[data-theme="slate"], [data-theme="slate"] {
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --ring: #0f172a;
+  --sidebar-primary: #0f172a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #0f172a;
+  --chart-1: #0f172a;
+}
+.dark[data-theme="slate"], .dark [data-theme="slate"] {
+  --primary: #f8fafc;
+  --primary-foreground: #0f172a;
+  --ring: #f8fafc;
+  --sidebar-primary: #f8fafc;
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-ring: #f8fafc;
+  --chart-1: #f8fafc;
+}
+
+/* Espresso Bronze */
+:root[data-theme="espresso"], [data-theme="espresso"] {
+  --primary: #854d0e;
+  --primary-foreground: #ffffff;
+  --ring: #854d0e;
+  --sidebar-primary: #854d0e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #854d0e;
+  --chart-1: #854d0e;
+}
+.dark[data-theme="espresso"], .dark [data-theme="espresso"] {
+  --primary: #ca8a04;
+  --primary-foreground: #090d16;
+  --ring: #ca8a04;
+  --sidebar-primary: #ca8a04;
+  --sidebar-primary-foreground: #090d16;
+  --sidebar-ring: #ca8a04;
+  --chart-1: #ca8a04;
+}
+
+/* ============================================================
+   FESTIVE & SEASONAL THEMES
+   ============================================================ */
+
+/* 🎃 Halloween */
+:root[data-theme="halloween"], [data-theme="halloween"] {
+  --popover: #0f172a;
+  --popover-foreground: #f8fafc;
+  --primary: #ea580c;
+  --primary-foreground: #ffffff;
+  --ring: #ea580c;
+  --sidebar-primary: #ea580c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #ea580c;
+  --chart-1: #ea580c;
+}
+.dark[data-theme="halloween"], .dark [data-theme="halloween"] {
+  --primary: #f97316;
+  --primary-foreground: #090d16;
+  --ring: #f97316;
+  --sidebar-primary: #f97316;
+  --sidebar-primary-foreground: #090d16;
+  --sidebar-ring: #f97316;
+  --chart-1: #f97316;
+}
+
+/* 🏮 Tết Trung Thu */
+:root[data-theme="tet-trung-thu"], [data-theme="tet-trung-thu"] {
+  --primary: #d97706;
+  --primary-foreground: #ffffff;
+  --ring: #d97706;
+  --sidebar-primary: #d97706;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #d97706;
+  --chart-1: #d97706;
+}
+.dark[data-theme="tet-trung-thu"], .dark [data-theme="tet-trung-thu"] {
+  --primary: #fbbf24;
+  --primary-foreground: #090d16;
+  --ring: #fbbf24;
+  --sidebar-primary: #fbbf24;
+  --sidebar-primary-foreground: #090d16;
+  --sidebar-ring: #fbbf24;
+  --chart-1: #fbbf24;
+}
+
+/* 🇻🇳 Quốc Khánh 2/9 */
+:root[data-theme="quoc-khanh"], [data-theme="quoc-khanh"] {
+  --primary: #dc2626;
+  --primary-foreground: #ffffff;
+  --ring: #dc2626;
+  --sidebar-primary: #dc2626;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #dc2626;
+  --chart-1: #dc2626;
+}
+.dark[data-theme="quoc-khanh"], .dark [data-theme="quoc-khanh"] {
+  --primary: #ef4444;
+  --primary-foreground: #ffffff;
+  --ring: #ef4444;
+  --sidebar-primary: #ef4444;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #ef4444;
+  --chart-1: #ef4444;
+}
+
+/* 🎋 Tết Đoan Ngọ */
+:root[data-theme="tet-doan-ngo"], [data-theme="tet-doan-ngo"] {
+  --primary: #15803d;
+  --primary-foreground: #ffffff;
+  --ring: #15803d;
+  --sidebar-primary: #15803d;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #15803d;
+  --chart-1: #15803d;
+}
+.dark[data-theme="tet-doan-ngo"], .dark [data-theme="tet-doan-ngo"] {
+  --primary: #22c55e;
+  --primary-foreground: #090d16;
+  --ring: #22c55e;
+  --sidebar-primary: #22c55e;
+  --sidebar-primary-foreground: #090d16;
+  --sidebar-ring: #22c55e;
+  --chart-1: #22c55e;
+}
+
+/* 🌸 Tết Nguyên Đán */
+:root[data-theme="tet-nguyen-dan"], [data-theme="tet-nguyen-dan"] {
+  --primary: #be123c;
+  --primary-foreground: #ffffff;
+  --ring: #be123c;
+  --sidebar-primary: #be123c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #be123c;
+  --chart-1: #be123c;
+}
+.dark[data-theme="tet-nguyen-dan"], .dark [data-theme="tet-nguyen-dan"] {
+  --primary: #fb7185;
+  --primary-foreground: #090d16;
+  --ring: #fb7185;
+  --sidebar-primary: #fb7185;
+  --sidebar-primary-foreground: #090d16;
+  --sidebar-ring: #fb7185;
+  --chart-1: #fb7185;
+}
+
+/* 🎄 Giáng Sinh (Christmas) */
+:root[data-theme="christmas"], [data-theme="christmas"] {
+  --primary: #047857;
+  --primary-foreground: #ffffff;
+  --ring: #047857;
+  --sidebar-primary: #047857;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #047857;
+  --chart-1: #047857;
+}
+.dark[data-theme="christmas"], .dark [data-theme="christmas"] {
+  --primary: #10b981;
+  --primary-foreground: #090d16;
+  --ring: #10b981;
+  --sidebar-primary: #10b981;
+  --sidebar-primary-foreground: #090d16;
+  --sidebar-ring: #10b981;
+  --chart-1: #10b981;
 }
 
 @layer base {
@@ -153,6 +444,870 @@
   html {
     @apply font-sans;
   }
+}
+
+/* Custom scrollbars for data-dense tables and POS lists */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.8 0.01 250);
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: oklch(0.3 0.02 260);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.65 0.02 250);
+}
+
+/* Micro-interactions & Tactile Animations */
+.tactile-button {
+  transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.tactile-button:active {
+  transform: scale(0.975);
+}
+
+/* =========================================================================
+   TECHSHOP V2.5 DESIGN SYSTEM TOKENS & MESH BACKGROUNDS
+   ========================================================================= */
+
+/* Background Mesh tinh tế đồng bộ cho cả Login, POS và Repair */
+.bg-mesh-light {
+  background-color: #f4f7fb;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.06) 0px, transparent 50%);
+}
+.dark .bg-mesh-light,
+[data-theme="dark"] .bg-mesh-light,
+[data-theme="halloween"] .bg-mesh-light {
+  background-color: #090d16;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.16) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.14) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(245, 158, 11, 0.06) 0px, transparent 50%);
+}
+
+/* Hiệu ứng thẻ Hover 3D & Viền sáng (V2.5 POS Card) */
+.pos-card {
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+.pos-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+.dark .pos-card::before,
+[data-theme="dark"] .pos-card::before,
+[data-theme="halloween"] .pos-card::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.06),
+    transparent
+  );
+}
+.pos-card:hover::before {
+  left: 140%;
+}
+.pos-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px -10px rgba(37, 99, 235, 0.16), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+}
+.pos-card:active {
+  transform: translateY(-1px) scale(0.985);
+}
+
+/* Animation Pop & Slide */
+@keyframes cart-pop {
+  0% { transform: scale(0.96); opacity: 0.5; }
+  50% { transform: scale(1.03); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-cart-pop {
+  animation: cart-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slide-in-right {
+  0% { opacity: 0; transform: translateX(16px) scale(0.97); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+.cart-item-enter {
+  animation: slide-in-right 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+/* Viền phát sáng cho ô Input khi Focus */
+.input-glow:focus-within {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14), 0 10px 25px -5px rgba(59, 130, 246, 0.1);
+  border-color: #3b82f6 !important;
+}
+.input-glow-amber:focus-within {
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15), 0 10px 25px -5px rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b !important;
+}
+
+/* Hạt bay vào giỏ hàng (Fly to Cart Particle) */
+.flying-dot {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5);
+  z-index: 9999;
+  pointer-events: none;
+  transition: all 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tactile-card {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.tactile-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+}
+.tactile-card:active {
+  transform: scale(0.99);
+}
+
+/* Tabular Numbers for Accurate Monetary & Quantities Alignment */
+.tabular-numbers {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Subtle Shimmer Effect for Loading / Skeleton */
+@keyframes subtle-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: subtle-shimmer 2s infinite ease-in-out;
+}
+
+/* Live Pulse Status Dot */
+.status-beacon {
+  position: relative;
+  display: inline-flex;
+  height: 0.5rem;
+  width: 0.5rem;
+}
+.status-beacon-ping {
+  position: absolute;
+  display: inline-flex;
+  height: 100%;
+  width: 100%;
+  border-radius: 9999px;
+  opacity: 0.75;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+.status-beacon-dot {
+  position: relative;
+  display: inline-flex;
+  border-radius: 9999px;
+  height: 0.5rem;
+  width: 0.5rem;
+}
+
+/* Engineering Dot Pattern & Ambient Glow for Pro Max Surfaces */
+.tech-dot-grid {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.18) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dark .tech-dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+}
+
+@keyframes ambient-glow {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.22;
+  }
+  50% {
+    transform: translate(15px, -20px) scale(1.12);
+    opacity: 0.38;
+  }
+}
+.animate-ambient-glow {
+  animation: ambient-glow 8s ease-in-out infinite;
+}
+
+/* Spider Lifecycle: Crawling, Dropping down on silk, Dangling, Climbing back up, Disappearing */
+@keyframes spider-lifecycle {
+  /* 0% - 12%: Resting on web */
+  0%, 12% {
+    transform: translate(38px, 26px) rotate(0deg);
+    opacity: 1;
+  }
+  /* 12% - 22%: Crawls along arc to drop point */
+  16% {
+    transform: translate(41px, 29px) rotate(16deg);
+    opacity: 1;
+  }
+  22% {
+    transform: translate(46px, 34px) rotate(0deg);
+    opacity: 1;
+  }
+  /* 22% - 30%: Drops down on silk thread */
+  30% {
+    transform: translate(46px, 86px) rotate(0deg);
+    opacity: 1;
+  }
+  /* 30% - 44%: Dangles and sways in the air */
+  33% {
+    transform: translate(45px, 86px) rotate(-8deg);
+    opacity: 1;
+  }
+  37% {
+    transform: translate(47px, 86px) rotate(8deg);
+    opacity: 1;
+  }
+  41% {
+    transform: translate(45.5px, 86px) rotate(-4deg);
+    opacity: 1;
+  }
+  44% {
+    transform: translate(46px, 86px) rotate(0deg);
+    opacity: 1;
+  }
+  /* 44% - 52%: Climbs back up silk thread */
+  52% {
+    transform: translate(46px, 34px) rotate(0deg);
+    opacity: 1;
+  }
+  /* 54% - 64%: Crawls back towards corner */
+  57% {
+    transform: translate(34px, 24px) rotate(-20deg);
+    opacity: 1;
+  }
+  61% {
+    transform: translate(18px, 12px) rotate(-35deg);
+    opacity: 1;
+  }
+  64% {
+    transform: translate(6px, 4px) rotate(-45deg);
+    opacity: 1;
+  }
+  /* 67% - 91%: Disappears into corner for ~8-9s */
+  67% {
+    transform: translate(0px, 0px) rotate(-45deg);
+    opacity: 0;
+  }
+  68%, 91% {
+    transform: translate(0px, 0px) rotate(-45deg);
+    opacity: 0;
+  }
+  /* 93% - 97%: Reappears and crawls out */
+  93% {
+    transform: translate(6px, 4px) rotate(-45deg);
+    opacity: 1;
+  }
+  97% {
+    transform: translate(22px, 16px) rotate(-15deg);
+    opacity: 1;
+  }
+  /* 100%: Back to start position */
+  100% {
+    transform: translate(38px, 26px) rotate(0deg);
+    opacity: 1;
+  }
+}
+.animate-spider-lifecycle {
+  animation: spider-lifecycle 32s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Spider Silk Thread (Dropping & Retracting in exact sync) */
+@keyframes spider-silk-unroll {
+  0%, 21.9% {
+    stroke-dashoffset: 52;
+    opacity: 0;
+  }
+  22% {
+    stroke-dashoffset: 52;
+    opacity: 0.55;
+  }
+  30% {
+    stroke-dashoffset: 0;
+    opacity: 0.55;
+  }
+  44% {
+    stroke-dashoffset: 0;
+    opacity: 0.55;
+  }
+  52% {
+    stroke-dashoffset: 52;
+    opacity: 0.55;
+  }
+  52.1%, 100% {
+    stroke-dashoffset: 52;
+    opacity: 0;
+  }
+}
+.animate-spider-silk {
+  stroke-dasharray: 52;
+  animation: spider-silk-unroll 32s ease-in-out infinite;
+}
+
+/* Subtle, soft glow for the smaller spider */
+@keyframes spider-glow-subtle {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 3.5px rgba(192, 132, 252, 0.65));
+  }
+}
+.animate-spider-subtle {
+  animation: spider-glow-subtle 3s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* ==========================================================================
+   REALISTIC BAT FLOCK FLIGHT (V-FORMATION, FLAP-FLAP-GLIDE, NATURAL SWOOPS)
+   ========================================================================== */
+
+/* Flock horizontal traversal across viewport */
+@keyframes bat-flock-fly-ltr {
+  0% {
+    transform: translateX(-160px);
+    opacity: 0;
+  }
+  1.5% {
+    opacity: 0.95;
+  }
+  98.5% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateX(calc(100vw + 160px));
+    opacity: 0;
+  }
+}
+
+@keyframes bat-flock-fly-rtl {
+  0% {
+    transform: translateX(calc(100vw + 160px));
+    opacity: 0;
+  }
+  1.5% {
+    opacity: 0.95;
+  }
+  98.5% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateX(-160px);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   ACTIVE BAT WING FLAPPING (Continuous, Graceful, 100% Browser Compatible)
+   ========================================================================== */
+
+@keyframes bat-wing-flap-left {
+  0% {
+    transform: rotate(-28deg) scaleY(0.88);
+  }
+  100% {
+    transform: rotate(24deg) scaleY(1.12);
+  }
+}
+
+@keyframes bat-wing-flap-right {
+  0% {
+    transform: rotate(28deg) scaleY(0.88);
+  }
+  100% {
+    transform: rotate(-24deg) scaleY(1.12);
+  }
+}
+
+/* Bat 1 Wing Animations (0.32s continuous flap) */
+.animate-bat-wing-left-1 {
+  transform-origin: 0 0;
+  animation: bat-wing-flap-left 0.32s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.animate-bat-wing-right-1 {
+  transform-origin: 0 0;
+  animation: bat-wing-flap-right 0.32s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Bat 2 Wing Animations (0.28s continuous flap) */
+.animate-bat-wing-left-2 {
+  transform-origin: 0 0;
+  animation: bat-wing-flap-left 0.28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.animate-bat-wing-right-2 {
+  transform-origin: 0 0;
+  animation: bat-wing-flap-right 0.28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Bat 3 Wing Animations (0.36s continuous flap) */
+.animate-bat-wing-left-3 {
+  transform-origin: 0 0;
+  animation: bat-wing-flap-left 0.36s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.animate-bat-wing-right-3 {
+  transform-origin: 0 0;
+  animation: bat-wing-flap-right 0.36s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   SANTA & REINDEER SLEIGH FLIGHT ANIMATIONS
+   ========================================================================== */
+
+/* Santa Sleigh horizontal cruising across screen */
+@keyframes santa-fly-ltr {
+  0% {
+    transform: translateX(-180px);
+    opacity: 0;
+  }
+  2% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100vw + 180px));
+    opacity: 0;
+  }
+}
+
+@keyframes santa-fly-rtl {
+  0% {
+    transform: translateX(calc(100vw + 180px));
+    opacity: 0;
+  }
+  2% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-180px);
+    opacity: 0;
+  }
+}
+
+/* Santa Sleigh gentle swooping / floating */
+@keyframes santa-flight-glide {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-16px) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(14px) rotate(2deg);
+  }
+  75% {
+    transform: translateY(-10px) rotate(-2deg);
+  }
+}
+.animate-santa-glide {
+  animation: santa-flight-glide 4.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Rudolph Glowing Red Nose Pulsing */
+@keyframes rudolph-nose-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px #ef4444) drop-shadow(0 0 7px #f87171);
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 7px #dc2626) drop-shadow(0 0 14px #ef4444);
+    transform: scale(1.2);
+  }
+}
+.animate-rudolph-nose {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rudolph-nose-glow 1.1s ease-in-out infinite;
+}
+
+/* Reindeer galloping legs */
+@keyframes reindeer-gallop-leg {
+  0%, 100% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(18deg);
+  }
+}
+.animate-reindeer-legs {
+  transform-box: fill-box;
+  transform-origin: top center;
+  animation: reindeer-gallop-leg 0.5s ease-in-out infinite alternate;
+}
+
+/* Santa Hat gentle festive wiggle & pom-pom bounce on Logo */
+@keyframes santa-hat-wiggle {
+  0%, 82%, 100% {
+    transform: rotate(0deg);
+  }
+  86% {
+    transform: rotate(-6deg);
+  }
+  90% {
+    transform: rotate(5deg);
+  }
+  94% {
+    transform: rotate(-3deg);
+  }
+  98% {
+    transform: rotate(1deg);
+  }
+}
+.animate-santa-hat-wiggle {
+  animation: santa-hat-wiggle 4.8s ease-in-out infinite;
+  transform-origin: bottom left;
+}
+
+@keyframes pom-pom-bounce {
+  0%, 84%, 100% {
+    transform: translateY(0);
+  }
+  88% {
+    transform: translateY(-2.5px);
+  }
+  92% {
+    transform: translateY(1.5px);
+  }
+  96% {
+    transform: translateY(-0.8px);
+  }
+}
+.animate-pom-pom-bounce {
+  animation: pom-pom-bounce 4.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* ==========================================================================
+   CHRISTMAS SNOW ACCUMULATION ON BUTTONS & HORIZONTAL BARS
+   ========================================================================== */
+
+/* 1. Snow caps on primary action buttons (Checkout, Add Tab, Filters) */
+[data-theme="christmas"] button.bg-primary,
+[data-theme="christmas"] .tactile-button,
+[data-theme="christmas"] [data-christmas-snow] {
+  position: relative;
+}
+
+[data-theme="christmas"] button.bg-primary::before,
+[data-theme="christmas"] .tactile-button::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 3px;
+  right: 3px;
+  height: 6px;
+  background: linear-gradient(180deg, #ffffff 65%, rgba(241, 245, 249, 0.95) 100%);
+  border-radius: 999px 999px 3px 3px;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.8), 0 2px 4px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Subtle snow drip / little icicle under button snow cap */
+[data-theme="christmas"] button.bg-primary::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 12px;
+  width: 4px;
+  height: 4px;
+  background: #ffffff;
+  border-radius: 0 0 999px 999px;
+  box-shadow: 16px -1px 0 0.5px #ffffff, 34px -2px 0 0 #ffffff;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 2. Snow frosting & pillows on Header and Horizontal Bars */
+[data-theme="christmas"] header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(180deg, #ffffff 70%, rgba(255, 255, 255, 0.85) 100%);
+  box-shadow: 0 1px 4px rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  z-index: 35;
+}
+
+[data-theme="christmas"] header::after {
+  content: "";
+  position: absolute;
+  bottom: -2.5px;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: radial-gradient(circle at 10px 0, #ffffff 5px, transparent 6px) repeat-x;
+  background-size: 18px 5px;
+  opacity: 0.95;
+  pointer-events: none;
+  z-index: 35;
+}
+
+/* 3. Snow frosting on POS product cards & card headers */
+[data-theme="christmas"] .tactile-card,
+[data-theme="christmas"] [data-product-card],
+[data-theme="christmas"] .product-card {
+  position: relative;
+  border-top-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+[data-theme="christmas"] .tactile-card::before,
+[data-theme="christmas"] [data-product-card]::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 6px;
+  right: 6px;
+  height: 4px;
+  background: linear-gradient(180deg, #ffffff 75%, rgba(255, 255, 255, 0.6) 100%);
+  border-radius: 999px 999px 2px 2px;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Bat Body subtle bobbing in flight */
+@keyframes bat-body-bobbing {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(1.5px);
+  }
+}
+.animate-bat-body-bob-1 {
+  animation: bat-body-bobbing 0.36s ease-in-out infinite;
+}
+.animate-bat-body-bob-2 {
+  animation: bat-body-bobbing 0.32s ease-in-out -0.1s infinite;
+}
+.animate-bat-body-bob-3 {
+  animation: bat-body-bobbing 0.40s ease-in-out -0.2s infinite;
+}
+
+/* Bat 1 (Leader): Sweeping dive down, then soaring up with realistic aerodynamic pitch */
+@keyframes bat-flight-swoop-1 {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  20% {
+    transform: translateY(48px) rotate(14deg);
+  }
+  45% {
+    transform: translateY(-38px) rotate(-12deg);
+  }
+  70% {
+    transform: translateY(32px) rotate(8deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+.animate-bat-swoop-1 {
+  animation: bat-flight-swoop-1 5.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Bat 2 (Upper Wingman): Inverted soaring arc */
+@keyframes bat-flight-swoop-2 {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  24% {
+    transform: translateY(-42px) rotate(-12deg);
+  }
+  50% {
+    transform: translateY(46px) rotate(14deg);
+  }
+  75% {
+    transform: translateY(-26px) rotate(-8deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+.animate-bat-swoop-2 {
+  animation: bat-flight-swoop-2 4.6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Bat 3 (Lower Wingman): Deeper dive and climb */
+@keyframes bat-flight-swoop-3 {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  28% {
+    transform: translateY(58px) rotate(16deg);
+  }
+  58% {
+    transform: translateY(-44px) rotate(-14deg);
+  }
+  84% {
+    transform: translateY(22px) rotate(6deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+.animate-bat-swoop-3 {
+  animation: bat-flight-swoop-3 5.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* ==========================================================================
+   THEME-SPECIFIC AMBIENT BACKGROUNDS & CARD GLOWS
+   ========================================================================== */
+
+/* Halloween: Eerie Ember & Purple radial background + neon orange halo */
+[data-theme="halloween"] body {
+  background-image: radial-gradient(circle at 10% 15%, rgba(234, 88, 12, 0.05) 0%, transparent 40%),
+                    radial-gradient(circle at 90% 85%, rgba(147, 51, 234, 0.06) 0%, transparent 40%);
+}
+.dark[data-theme="halloween"] body {
+  background-image: radial-gradient(circle at 10% 15%, rgba(234, 88, 12, 0.08) 0%, transparent 40%),
+                    radial-gradient(circle at 90% 85%, rgba(147, 51, 234, 0.12) 0%, transparent 40%);
+}
+[data-theme="halloween"] .tactile-card:hover,
+[data-theme="halloween"] [data-product-card]:hover,
+[data-theme="halloween"] .product-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(234, 88, 12, 0.25), 0 0 12px 1px rgba(147, 51, 234, 0.2);
+}
+
+/* Tết Trung Thu: Moonlit gold & lantern warm aura */
+[data-theme="tet-trung-thu"] body {
+  background-image: radial-gradient(circle at 50% 10%, rgba(217, 119, 6, 0.07) 0%, transparent 45%),
+                    radial-gradient(circle at 85% 80%, rgba(220, 38, 38, 0.04) 0%, transparent 40%);
+}
+.dark[data-theme="tet-trung-thu"] body {
+  background-image: radial-gradient(circle at 50% 10%, rgba(217, 119, 6, 0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 85% 80%, rgba(220, 38, 38, 0.08) 0%, transparent 45%);
+}
+[data-theme="tet-trung-thu"] .tactile-card:hover,
+[data-theme="tet-trung-thu"] [data-product-card]:hover,
+[data-theme="tet-trung-thu"] .product-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.25), 0 0 12px 1px rgba(220, 38, 38, 0.15);
+}
+
+/* Quốc Khánh 2/9: Patriotic red son & golden star radiance */
+[data-theme="quoc-khanh"] body {
+  background-image: radial-gradient(circle at 20% 15%, rgba(220, 38, 38, 0.06) 0%, transparent 40%),
+                    radial-gradient(circle at 80% 85%, rgba(234, 179, 8, 0.06) 0%, transparent 40%);
+}
+.dark[data-theme="quoc-khanh"] body {
+  background-image: radial-gradient(circle at 20% 15%, rgba(220, 38, 38, 0.10) 0%, transparent 40%),
+                    radial-gradient(circle at 80% 85%, rgba(234, 179, 8, 0.10) 0%, transparent 40%);
+}
+[data-theme="quoc-khanh"] .tactile-card:hover,
+[data-theme="quoc-khanh"] [data-product-card]:hover,
+[data-theme="quoc-khanh"] .product-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.25), 0 0 12px 1px rgba(234, 179, 8, 0.2);
+}
+
+/* Tết Đoan Ngọ: Herbal emerald & green freshness */
+[data-theme="tet-doan-ngo"] body {
+  background-image: radial-gradient(circle at 20% 20%, rgba(21, 128, 61, 0.06) 0%, transparent 40%),
+                    radial-gradient(circle at 80% 70%, rgba(132, 204, 22, 0.05) 0%, transparent 40%);
+}
+.dark[data-theme="tet-doan-ngo"] body {
+  background-image: radial-gradient(circle at 20% 20%, rgba(21, 128, 61, 0.10) 0%, transparent 40%),
+                    radial-gradient(circle at 80% 70%, rgba(132, 204, 22, 0.08) 0%, transparent 40%);
+}
+[data-theme="tet-doan-ngo"] .tactile-card:hover,
+[data-theme="tet-doan-ngo"] [data-product-card]:hover,
+[data-theme="tet-doan-ngo"] .product-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(21, 128, 61, 0.25), 0 0 12px 1px rgba(132, 204, 22, 0.2);
+}
+
+/* Tết Nguyên Đán: Spring peach & golden apricot blossoms */
+[data-theme="tet-nguyen-dan"] body {
+  background-image: radial-gradient(circle at 15% 10%, rgba(190, 18, 60, 0.07) 0%, transparent 40%),
+                    radial-gradient(circle at 85% 85%, rgba(234, 179, 8, 0.07) 0%, transparent 40%);
+}
+.dark[data-theme="tet-nguyen-dan"] body {
+  background-image: radial-gradient(circle at 15% 10%, rgba(190, 18, 60, 0.12) 0%, transparent 40%),
+                    radial-gradient(circle at 85% 85%, rgba(234, 179, 8, 0.12) 0%, transparent 40%);
+}
+[data-theme="tet-nguyen-dan"] .tactile-card:hover,
+[data-theme="tet-nguyen-dan"] [data-product-card]:hover,
+[data-theme="tet-nguyen-dan"] .product-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(190, 18, 60, 0.25), 0 0 12px 1px rgba(234, 179, 8, 0.2);
+}
+
+/* Christmas: Pine snow frost & holiday glow */
+[data-theme="christmas"] body {
+  background-image: radial-gradient(circle at 15% 15%, rgba(4, 120, 87, 0.06) 0%, transparent 40%),
+                    radial-gradient(circle at 85% 85%, rgba(225, 29, 72, 0.05) 0%, transparent 40%);
+}
+.dark[data-theme="christmas"] body {
+  background-image: radial-gradient(circle at 15% 15%, rgba(4, 120, 87, 0.12) 0%, transparent 40%),
+                    radial-gradient(circle at 85% 85%, rgba(225, 29, 72, 0.10) 0%, transparent 40%);
+}
+[data-theme="christmas"] .tactile-card:hover,
+[data-theme="christmas"] [data-product-card]:hover,
+[data-theme="christmas"] .product-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(4, 120, 87, 0.25), 0 0 12px 1px rgba(225, 29, 72, 0.2);
 }
 
 @media print {
@@ -201,4 +1356,18 @@
   body[data-print-size="80mm"] .print-hide-on-thermal {
     display: none !important;
   }
+}
+
+/* ==========================================================================
+   HIGH-CONTRAST SELECT OPTION THEMING (PREVENTS WHITE-ON-WHITE DROPDOWNS)
+   ========================================================================== */
+select option {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+.dark select option,
+[data-theme="halloween"] select option,
+html.dark select option {
+  background-color: #0f172a;
+  color: #f8fafc;
 }

@@ -29,7 +29,7 @@ const ROLE_ICONS: Record<string, React.ReactNode> = {
 
 const ROLE_COLORS: Record<string, string> = {
   admin: "bg-purple-50 text-purple-600 border-purple-100",
-  staff: "bg-blue-50 text-blue-600 border-blue-100",
+  staff: "bg-primary/10 text-primary border-primary/20",
   technician: "bg-amber-50 text-amber-600 border-amber-100",
 };
 
@@ -87,7 +87,7 @@ export default async function UsersPage() {
           label="Nhân viên POS"
           value={String(counts.staff)}
           subValue="Bán hàng & Kho"
-          gradient="from-blue-500 to-indigo-600"
+          gradient="from-primary to-primary/80"
         />
         <Kpi
           icon={<Wrench className="size-5" />}
@@ -119,7 +119,7 @@ export default async function UsersPage() {
                 <div className={cn(
                   "h-1.5 w-full",
                   u.role === "admin" ? "bg-purple-500" :
-                  u.role === "staff" ? "bg-blue-500" : "bg-amber-500"
+                  u.role === "staff" ? "bg-primary" : "bg-amber-500"
                 )} />
                 
                 <div className="p-6">

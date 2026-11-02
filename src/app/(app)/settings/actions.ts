@@ -20,6 +20,8 @@ export async function updateSettings(data: {
   shopPhone: string;
   shopEmail: string;
   printSize: string;
+  timezone?: string;
+  themeColor?: string;
   bankId: string;
   bankAccount: string;
   bankAccountName: string;
@@ -36,6 +38,8 @@ export async function updateSettings(data: {
       shopPhone: data.shopPhone || null,
       shopEmail: data.shopEmail || null,
       printSize: data.printSize,
+      timezone: data.timezone || "Asia/Ho_Chi_Minh",
+      themeColor: data.themeColor || "blue",
       bankId: data.bankId || null,
       bankAccount: data.bankAccount || null,
       bankAccountName: data.bankAccountName || null,

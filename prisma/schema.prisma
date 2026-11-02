@@ -48,6 +48,8 @@ model AppSetting {
   bankAccount     String?
   bankAccountName String?
   printSize       String   @default("A4") // A4 | 80mm
+  timezone        String   @default("Asia/Ho_Chi_Minh")
+  themeColor      String   @default("blue")
   updatedAt       DateTime @updatedAt
 
   // Atomic counters for human-readable codes

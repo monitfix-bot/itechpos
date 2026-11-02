@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { formatVND, formatDateTime } from "@/lib/format";
+import { formatVND } from "@/lib/format";
 import {
   PrintReceiptShell,
 } from "@/components/print-receipt-shell";
@@ -62,7 +62,8 @@ export default async function ServiceReturnPrintPage({
     dia_chi_cua_hang: settings.shopAddress || "",
     sdt_cua_hang: settings.shopPhone || "",
     ma_phieu: ticket.code,
-    ngay_tao: formatDateTime(ticket.receivedAt),
+    ngay_tao: ticket.receivedAt,
+    timezone: settings.timezone,
     ten_khach: ticket.customer.name,
     sdt_khach: ticket.customer.phone,
     dia_chi_khach: ticket.customer.address,
@@ -71,16 +72,27 @@ export default async function ServiceReturnPrintPage({
     hang: ticket.deviceBrand || "",
     model: ticket.deviceModel || "",
     imei: ticket.imei,
+    imei_serial: ticket.imei,
+    tinh_trang: ticket.appearance,
+    tinh_trang_may: ticket.appearance,
+    loi_yeu_cau: ticket.problem,
+    yeu_cau_khach: ticket.problem,
     giai_phap: ticket.solution,
-    ngay_tra: ticket.deliveredAt ? formatDateTime(ticket.deliveredAt) : "",
+    giai_phap_sua: ticket.solution,
+    ngay_tra: ticket.deliveredAt,
     tam_tinh: ticket.finalCost,
     tong_cong: ticket.finalCost,
+    tong_chi_phi: ticket.finalCost,
     da_dat_coc: ticket.deposit,
+    tien_dat_coc: ticket.deposit,
     thanh_toan_lan_nay: ticket.paid,
+    thuc_thu: ticket.paid > 0 ? ticket.paid : Math.max(0, ticket.finalCost - ticket.deposit),
     da_thanh_toan: ticket.paid + ticket.deposit,
     con_no: Math.max(0, due),
-    ten_nhan_vien: ticket.createdBy.name,
+    ten_nhan_vien: ticket.assignedTo?.name || ticket.createdBy.name,
+    ktv_phu_trach: ticket.assignedTo?.name || ticket.createdBy.name,
     bao_hanh: ticket.warranty,
+    thoi_gian_bao_hanh: ticket.warranty ? `${ticket.warranty} tháng` : "",
     ghi_chu: ticket.note || "",
     bank_id: settings.bankId,
     bank_account: settings.bankAccount,

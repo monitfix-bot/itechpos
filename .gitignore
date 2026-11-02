@@ -46,3 +46,5 @@ next-env.d.ts
 *.db-journal
 .tempmediaStorage/
 scratch/
+.ag-kit-backups/
+skills-lock.json
