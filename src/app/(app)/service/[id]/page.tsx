@@ -184,7 +184,7 @@ export default async function ServiceDetailPage({
             <p className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap">
               <span>Tiếp nhận: <strong className="text-foreground">{formatDateTime(ticket.receivedAt)}</strong></span>
               <span>•</span>
-              <span>Nhân viên: <strong className="text-foreground">{ticket.createdBy.name}</strong></span>
+              <span>Nhân viên: <strong className="text-foreground">{ticket.createdBy?.name || "Nhân viên"}</strong></span>
               {ticket.assignedTo && (
                 <>
                   <span>•</span>
@@ -283,7 +283,7 @@ export default async function ServiceDetailPage({
                   <h3 className="font-bold text-sm text-foreground">Khách hàng</h3>
                 </div>
                 <Link
-                  href={`/customers/${ticket.customer.id}`}
+                  href={ticket.customer ? `/customers/${ticket.customer.id}` : "#"}
                   className="text-xs text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1 font-semibold"
                 >
                   Hồ sơ CRM
@@ -294,22 +294,22 @@ export default async function ServiceDetailPage({
               <div className="space-y-2.5 text-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground text-xs">Họ và tên</span>
-                  <span className="font-bold text-foreground">{ticket.customer.name}</span>
+                  <span className="font-bold text-foreground">{ticket.customer?.name || "Khách lẻ"}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground text-xs">Số điện thoại</span>
-                  <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{ticket.customer.phone}</span>
+                  <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{ticket.customer?.phone || ""}</span>
                 </div>
-                {ticket.customer.code && (
+                {ticket.customer?.code && (
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground text-xs">Mã khách</span>
-                    <span className="font-mono text-xs px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 font-semibold">{ticket.customer.code}</span>
+                    <span className="font-mono text-xs px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 font-semibold">{ticket.customer?.code}</span>
                   </div>
                 )}
-                {ticket.customer.address && (
+                {ticket.customer?.address && (
                   <div className="flex items-start justify-between gap-2 pt-1 border-t border-slate-100 dark:border-slate-800/80">
                     <span className="text-muted-foreground text-xs shrink-0">Địa chỉ</span>
-                    <span className="text-xs text-right text-foreground line-clamp-2">{ticket.customer.address}</span>
+                    <span className="text-xs text-right text-foreground line-clamp-2">{ticket.customer?.address}</span>
                   </div>
                 )}
               </div>
@@ -681,7 +681,7 @@ export default async function ServiceDetailPage({
               <Separator />
               <div className="flex justify-between py-1">
                 <span className="text-muted-foreground">Người tiếp nhận:</span>
-                <span className="font-semibold text-foreground">{ticket.createdBy.name}</span>
+                <span className="font-semibold text-foreground">{ticket.createdBy?.name || "Nhân viên"}</span>
               </div>
               <div className="flex justify-between py-1">
                 <span className="text-muted-foreground">KTV xử lý:</span>

@@ -84,10 +84,13 @@ export async function globalSearch(query: string): Promise<{
       kind: "ticket",
       id: t.id,
       code: t.code,
-      title: `${t.code} · ${t.customer.name}`,
-      subtitle: `${device} · ${t.customer.phone}`,
+      title: `${t.code} · ${t.customer?.name ?? "Khách lẻ"}`,
+      subtitle: `${device} · ${t.customer?.phone ?? ""}`,
       badge: STATUS_LABEL[t.status] ?? t.status,
-      link: `/pos?ticket=${t.id}&code=${encodeURIComponent(t.code)}`,
+      link:
+        t.status === "delivered"
+          ? `/service/${t.id}`
+          : `/pos?ticket=${t.id}&code=${encodeURIComponent(t.code)}`,
     });
   }
 

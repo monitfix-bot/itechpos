@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useEffect, useState, useTransition, useRef } from "react";
 import {
   Loader2,
@@ -10,6 +12,8 @@ import {
   Trash2,
   Save,
   PackageCheck,
+  ExternalLink,
+  ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -111,12 +115,7 @@ export function TicketTab({
     };
   }, [ticketId, version, isActive]);
 
-  useEffect(() => {
-    if (data && data.status === "delivered") {
-      const t = setTimeout(() => onClosed(), 800);
-      return () => clearTimeout(t);
-    }
-  }, [data, onClosed]);
+  // Allow delivered tickets to be viewed without auto-closing the tab
 
   if (loading || !data) {
     if (!isActive) return null;
@@ -168,8 +167,8 @@ function TicketTabInner({
   const [returnOpen, setReturnOpen] = useState(false);
 
   const [form, setForm] = useState({
-    customerName: ticket.customer.name,
-    customerPhone: ticket.customer.phone,
+    customerName: ticket.customer?.name || "Khách lẻ",
+    customerPhone: ticket.customer?.phone || "",
     deviceType: ticket.deviceType,
     deviceBrand: ticket.deviceBrand || "",
     deviceModel: ticket.deviceModel || "",
@@ -185,8 +184,8 @@ function TicketTabInner({
   });
 
   const hasChanges =
-    form.customerName !== ticket.customer.name ||
-    form.customerPhone !== ticket.customer.phone ||
+    form.customerName !== (ticket.customer?.name || "Khách lẻ") ||
+    form.customerPhone !== (ticket.customer?.phone || "") ||
     form.deviceType !== ticket.deviceType ||
     form.deviceBrand !== (ticket.deviceBrand || "") ||
     form.deviceModel !== (ticket.deviceModel || "") ||
@@ -295,7 +294,7 @@ function TicketTabInner({
                   Tiếp nhận {formatDateTime(new Date(ticket.receivedAt))}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <ServiceStatusBadge status={ticket.status} />
                 <Button
                   type="button"
@@ -308,6 +307,27 @@ function TicketTabInner({
                   <Printer className="size-3.5" />
                   In phiếu nhận
                 </Button>
+                {isDelivered && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="border-emerald-500/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 font-semibold"
+                    onClick={() =>
+                      printInBackground(`/service/${ticket.id}/return`)
+                    }
+                  >
+                    <Printer className="size-3.5" />
+                    In phiếu trả
+                  </Button>
+                )}
+                <Link
+                  href={`/service/${ticket.id}`}
+                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1 font-semibold ml-1"
+                >
+                  Chi tiết hồ sơ
+                  <ExternalLink className="size-3" />
+                </Link>
               </div>
             </div>
           </CardHeader>
@@ -316,7 +336,7 @@ function TicketTabInner({
               <div className="flex items-center gap-2 mb-2">
                 <User className="size-3.5 text-muted-foreground" />
                 <div className="text-[11px] uppercase text-muted-foreground tracking-wide">
-                  Khách hàng · Mã {ticket.customer.code}
+                  Khách hàng · Mã {ticket.customer?.code || ""}
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
