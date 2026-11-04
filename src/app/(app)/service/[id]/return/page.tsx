@@ -9,6 +9,7 @@ import {
 import { getSettings } from "@/lib/settings";
 import { renderTemplate } from "@/lib/template-engine";
 import { sanitizeTemplateHtml } from "@/lib/sanitize-html";
+import { RETURN_LAYOUT } from "@/lib/default-templates";
 
 const DEVICE_LABELS: Record<string, string> = {
   phone: "Điện thoại",
@@ -56,6 +57,8 @@ export default async function ServiceReturnPrintPage({
     },
   });
 
+  const staffName = ticket.assignedTo?.name || ticket.createdBy?.name || "Kỹ thuật viên";
+
   const templateData = {
     ten_cua_hang: settings.shopName,
     shop_tagline: settings.shopTagline,
@@ -64,9 +67,9 @@ export default async function ServiceReturnPrintPage({
     ma_phieu: ticket.code,
     ngay_tao: ticket.receivedAt,
     timezone: settings.timezone,
-    ten_khach: ticket.customer.name,
-    sdt_khach: ticket.customer.phone,
-    dia_chi_khach: ticket.customer.address,
+    ten_khach: ticket.customer?.name || "Khách lẻ",
+    sdt_khach: ticket.customer?.phone || "",
+    dia_chi_khach: ticket.customer?.address || "",
     loai_may: DEVICE_LABELS[ticket.deviceType] || ticket.deviceType,
     ten_may: [ticket.deviceBrand, ticket.deviceModel].filter(Boolean).join(" "),
     hang: ticket.deviceBrand || "",
@@ -89,8 +92,8 @@ export default async function ServiceReturnPrintPage({
     thuc_thu: ticket.paid > 0 ? ticket.paid : Math.max(0, ticket.finalCost - ticket.deposit),
     da_thanh_toan: ticket.paid + ticket.deposit,
     con_no: Math.max(0, due),
-    ten_nhan_vien: ticket.assignedTo?.name || ticket.createdBy.name,
-    ktv_phu_trach: ticket.assignedTo?.name || ticket.createdBy.name,
+    ten_nhan_vien: staffName,
+    ktv_phu_trach: staffName,
     bao_hanh: ticket.warranty,
     thoi_gian_bao_hanh: ticket.warranty ? `${ticket.warranty} tháng` : "",
     ghi_chu: ticket.note || "",
@@ -131,8 +134,10 @@ export default async function ServiceReturnPrintPage({
 </div>
   `.trim();
 
+  const templateContent = template?.content || RETURN_LAYOUT;
+
   const renderedContent = sanitizeTemplateHtml(
-    renderTemplate(template?.content, templateData, itemsTableHtml),
+    renderTemplate(templateContent, templateData, itemsTableHtml),
   );
 
   return (

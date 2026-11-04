@@ -9,6 +9,7 @@ import {
 import { getSettings } from "@/lib/settings";
 import { renderTemplate } from "@/lib/template-engine";
 import { sanitizeTemplateHtml } from "@/lib/sanitize-html";
+import { INTAKE_LAYOUT } from "@/lib/default-templates";
 
 const DEVICE_LABELS: Record<string, string> = {
   phone: "Điện thoại",
@@ -40,6 +41,7 @@ export default async function ServiceIntakePrintPage({
     include: {
       customer: true,
       createdBy: true,
+      assignedTo: true,
       items: {
         include: { product: true }
       },
@@ -53,6 +55,8 @@ export default async function ServiceIntakePrintPage({
     },
   });
 
+  const staffName = ticket.assignedTo?.name || ticket.createdBy?.name || "Kỹ thuật viên";
+
   const templateData = {
     ten_cua_hang: settings.shopName,
     shop_tagline: settings.shopTagline,
@@ -61,9 +65,9 @@ export default async function ServiceIntakePrintPage({
     ma_phieu: ticket.code,
     ngay_tao: ticket.receivedAt,
     timezone: settings.timezone,
-    ten_khach: ticket.customer.name,
-    sdt_khach: ticket.customer.phone,
-    dia_chi_khach: ticket.customer.address,
+    ten_khach: ticket.customer?.name || "Khách lẻ",
+    sdt_khach: ticket.customer?.phone || "",
+    dia_chi_khach: ticket.customer?.address || "",
     loai_may: DEVICE_LABELS[ticket.deviceType] || ticket.deviceType,
     ten_may: [ticket.deviceBrand, ticket.deviceModel].filter(Boolean).join(" "),
     hang: ticket.deviceBrand || "",
@@ -83,8 +87,8 @@ export default async function ServiceIntakePrintPage({
     da_thanh_toan: ticket.deposit,
     da_dat_coc: ticket.deposit,
     tien_dat_coc: ticket.deposit,
-    ten_nhan_vien: ticket.createdBy.name,
-    ktv_phu_trach: ticket.createdBy.name,
+    ten_nhan_vien: staffName,
+    ktv_phu_trach: staffName,
     ghi_chu: ticket.note || "",
     bank_id: settings.bankId,
     bank_account: settings.bankAccount,
@@ -123,8 +127,10 @@ export default async function ServiceIntakePrintPage({
 </div>
   `.trim();
 
+  const templateContent = template?.content || INTAKE_LAYOUT;
+
   const renderedContent = sanitizeTemplateHtml(
-    renderTemplate(template?.content, templateData, itemsTableHtml),
+    renderTemplate(templateContent, templateData, itemsTableHtml),
   );
 
   return (

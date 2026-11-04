@@ -5,6 +5,7 @@ import { formatVND, formatDateTime, formatDate } from "@/lib/format";
 import { getSettings } from "@/lib/settings";
 import { renderTemplate } from "@/lib/template-engine";
 import { sanitizeTemplateHtml } from "@/lib/sanitize-html";
+import { SALE_LAYOUT } from "@/lib/default-templates";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -104,7 +105,7 @@ export default async function SaleDetailPage({
     da_thanh_toan: sale.paid,
     thuc_thu: sale.paid,
     con_no: due,
-    ten_nhan_vien: sale.user.name,
+    ten_nhan_vien: sale.user?.name || "Nhân viên",
     ghi_chu: sale.note || "",
     bank_id: settings.bankId,
     bank_account: settings.bankAccount,
@@ -149,8 +150,9 @@ export default async function SaleDetailPage({
 </div>
   `.trim();
 
+  const templateContent = template?.content || SALE_LAYOUT;
   const renderedContent = sanitizeTemplateHtml(
-    renderTemplate(template?.content, templateData, itemsTableHtml)
+    renderTemplate(templateContent, templateData, itemsTableHtml)
   );
 
   return (
