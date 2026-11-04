@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ServiceStatusBadge } from "@/components/service-status-badge";
 import { formatVND, formatDateTime, formatDate } from "@/lib/format";
+import { formatPaymentMethodDisplay, stripSplitTag } from "@/lib/payment-utils";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -59,6 +60,7 @@ const PAYMENT_LABELS: Record<string, string> = {
   cash: "Tiền mặt",
   transfer: "Chuyển khoản VietQR",
   card: "Thẻ ngân hàng",
+  split: "Tiền mặt + Chuyển khoản",
 };
 
 const PIPELINE_STEPS = [
@@ -606,7 +608,7 @@ export default async function ServiceDetailPage({
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-muted-foreground">Phương thức</span>
                   <span className="font-semibold text-foreground">
-                    {PAYMENT_LABELS[ticket.paymentMethod] || ticket.paymentMethod}
+                    {formatPaymentMethodDisplay(ticket.paymentMethod, ticket.note)}
                   </span>
                 </div>
               )}

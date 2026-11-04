@@ -41,6 +41,7 @@ export type ReconRow = {
   customerName: string | null;
   paymentMethod: string;
   total: number;
+  note?: string | null;
 };
 
 export type ReconStaff = {

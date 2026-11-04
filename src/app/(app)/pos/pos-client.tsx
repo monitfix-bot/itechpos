@@ -37,6 +37,7 @@ import {
   CreditCard,
   Banknote,
   QrCode,
+  WalletCards,
   Package,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -136,6 +137,8 @@ export function PosClient({
   const [cart, setCart] = useState<CartItem[]>([]);
   const [customer, setCustomer] = useState<CustomerSelection>({ mode: "none" });
   const [paymentMethod, setPaymentMethod] = useState<string>("cash");
+  const [splitCash, setSplitCash] = useState<string>("");
+  const [splitTransfer, setSplitTransfer] = useState<string>("");
   const [discount, setDiscount] = useState<number>(0);
   const [note, setNote] = useState("");
   const [openCheckout, setOpenCheckout] = useState(false);
@@ -266,6 +269,20 @@ export function PosClient({
     return false;
   }
 
+  function handleSplitCashChange(val: string) {
+    setSplitCash(val);
+    const num = Number(val) || 0;
+    const rem = Math.max(0, total - num);
+    setSplitTransfer(String(rem));
+  }
+
+  function handleSplitTransferChange(val: string) {
+    setSplitTransfer(val);
+    const num = Number(val) || 0;
+    const rem = Math.max(0, total - num);
+    setSplitCash(String(rem));
+  }
+
   function handleCheckout() {
     if (cart.length === 0) {
       toast.error("Giỏ hàng đang trống! Vui lòng chọn sản phẩm.");
@@ -310,12 +327,18 @@ export function PosClient({
                 },
               }
             : {};
+      const isSplit = paymentMethod === "split";
+      const cashVal = isSplit ? (Number(splitCash) || 0) : undefined;
+      const transferVal = isSplit ? (Number(splitTransfer) || 0) : undefined;
+
       const res = await createSale({
         items: cart,
         ...customerPayload,
         paymentMethod,
         discount,
         note,
+        splitCash: cashVal,
+        splitTransfer: transferVal,
       });
       if (res.ok) {
         playPosSound("success");
@@ -848,14 +871,14 @@ export function PosClient({
 
           <div className="space-y-4 py-2">
             {/* Payment Method Cards */}
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 type="button"
                 onClick={() => setPaymentMethod("cash")}
                 className={cn(
-                  "p-3 rounded-2xl flex flex-col items-center gap-1 text-xs transition-all",
+                  "p-3 rounded-2xl flex flex-col items-center gap-1.5 text-xs transition-all",
                   paymentMethod === "cash"
-                    ? "border-2 border-blue-600 bg-blue-50/50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-bold shadow-xs"
+                    ? "border-2 border-blue-600 bg-blue-50/70 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-bold shadow-xs"
                     : "border border-slate-200 dark:border-slate-700 hover:border-blue-400 text-slate-600 dark:text-slate-300 font-semibold"
                 )}
               >
@@ -867,9 +890,9 @@ export function PosClient({
                 type="button"
                 onClick={() => setPaymentMethod("transfer")}
                 className={cn(
-                  "p-3 rounded-2xl flex flex-col items-center gap-1 text-xs transition-all",
+                  "p-3 rounded-2xl flex flex-col items-center gap-1.5 text-xs transition-all",
                   paymentMethod === "transfer"
-                    ? "border-2 border-blue-600 bg-blue-50/50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-bold shadow-xs"
+                    ? "border-2 border-blue-600 bg-blue-50/70 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-bold shadow-xs"
                     : "border border-slate-200 dark:border-slate-700 hover:border-blue-400 text-slate-600 dark:text-slate-300 font-semibold"
                 )}
               >
@@ -879,11 +902,32 @@ export function PosClient({
 
               <button
                 type="button"
+                onClick={() => {
+                  setPaymentMethod("split");
+                  if (!splitCash && !splitTransfer) {
+                    const half = Math.round(total / 2);
+                    setSplitCash(String(half));
+                    setSplitTransfer(String(total - half));
+                  }
+                }}
+                className={cn(
+                  "p-3 rounded-2xl flex flex-col items-center gap-1.5 text-xs transition-all",
+                  paymentMethod === "split"
+                    ? "border-2 border-blue-600 bg-blue-50/70 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-bold shadow-xs"
+                    : "border border-slate-200 dark:border-slate-700 hover:border-blue-400 text-slate-600 dark:text-slate-300 font-semibold"
+                )}
+              >
+                <WalletCards className="w-5 h-5" />
+                <span>Kết hợp (TM+CK)</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => setPaymentMethod("card")}
                 className={cn(
-                  "p-3 rounded-2xl flex flex-col items-center gap-1 text-xs transition-all",
+                  "p-3 rounded-2xl flex flex-col items-center gap-1.5 text-xs transition-all",
                   paymentMethod === "card"
-                    ? "border-2 border-blue-600 bg-blue-50/50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-bold shadow-xs"
+                    ? "border-2 border-blue-600 bg-blue-50/70 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-bold shadow-xs"
                     : "border border-slate-200 dark:border-slate-700 hover:border-blue-400 text-slate-600 dark:text-slate-300 font-semibold"
                 )}
               >
@@ -891,6 +935,98 @@ export function PosClient({
                 <span>Thẻ / POS</span>
               </button>
             </div>
+
+            {paymentMethod === "split" && (
+              <div className="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-900/60 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-blue-700 dark:text-blue-300">
+                    <WalletCards className="w-4 h-4" />
+                    <span>Phân bổ kết hợp (Tiền mặt + Chuyển khoản)</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const half = Math.round(total / 2);
+                        setSplitCash(String(half));
+                        setSplitTransfer(String(total - half));
+                      }}
+                      className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-300 hover:bg-blue-50"
+                    >
+                      50 / 50
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSplitCash(String(total));
+                        setSplitTransfer("0");
+                      }}
+                      className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-300 hover:bg-blue-50"
+                    >
+                      100% TM
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSplitCash("0");
+                        setSplitTransfer(String(total));
+                      }}
+                      className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-300 hover:bg-blue-50"
+                    >
+                      100% CK
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                      <Banknote className="w-3.5 h-3.5 text-emerald-600" />
+                      Tiền mặt (VNĐ)
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      step={1000}
+                      value={splitCash}
+                      onChange={(e) => handleSplitCashChange(e.target.value)}
+                      placeholder="0"
+                      className="w-full px-3 py-2 text-xs font-mono font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                      <QrCode className="w-3.5 h-3.5 text-blue-600" />
+                      Chuyển khoản (VNĐ)
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      step={1000}
+                      value={splitTransfer}
+                      onChange={(e) => handleSplitTransferChange(e.target.value)}
+                      placeholder="0"
+                      className="w-full px-3 py-2 text-xs font-mono font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] pt-1 border-t border-blue-200/60 dark:border-blue-900/40">
+                  <span className="text-slate-500 dark:text-slate-400">Tổng đã khớp:</span>
+                  <span
+                    className={cn(
+                      "font-mono font-bold",
+                      (Number(splitCash) || 0) + (Number(splitTransfer) || 0) === total
+                        ? "text-emerald-600 dark:text-emerald-400"
+                        : "text-amber-600 dark:text-amber-400"
+                    )}
+                  >
+                    {formatVND((Number(splitCash) || 0) + (Number(splitTransfer) || 0))} / {formatVND(total)}
+                  </span>
+                </div>
+              </div>
+            )}
 
             {/* Breakdown box */}
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700 space-y-2 text-xs">

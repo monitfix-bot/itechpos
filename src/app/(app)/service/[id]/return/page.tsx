@@ -3,6 +3,7 @@ import { getSession } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { formatVND } from "@/lib/format";
+import { formatPaymentMethodDisplay } from "@/lib/payment-utils";
 import {
   PrintReceiptShell,
 } from "@/components/print-receipt-shell";
@@ -99,7 +100,7 @@ export default async function ServiceReturnPrintPage({
     ghi_chu: ticket.note || "",
     bank_id: settings.bankId,
     bank_account: settings.bankAccount,
-    payment_method: PAYMENT_LABELS[ticket.paymentMethod || ""] || ticket.paymentMethod || "",
+    payment_method: formatPaymentMethodDisplay(ticket.paymentMethod, ticket.note),
     items: ticket.items.map(it => ({
       ten: it.description,
       sl: it.quantity,
@@ -149,7 +150,7 @@ export default async function ServiceReturnPrintPage({
         size={size}
         settings={settings}
       >
-        <div className="receipt-padding p-8">
+        <div className={size === "80mm" ? "p-4 sm:p-5" : "p-6 sm:p-10"}>
           <div 
             className="prose prose-sm max-w-none text-black"
             dangerouslySetInnerHTML={{ __html: renderedContent }} 

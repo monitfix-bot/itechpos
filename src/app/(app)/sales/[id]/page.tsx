@@ -28,8 +28,10 @@ import {
   Clock,
   Sparkles,
   Layers,
+  WalletCards,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatPaymentMethodDisplay, parseSplitPayment, stripSplitTag } from "@/lib/payment-utils";
 
 const PAYMENT_LABELS: Record<string, { label: string; icon: any; color: string }> = {
   cash: {
@@ -46,6 +48,11 @@ const PAYMENT_LABELS: Record<string, { label: string; icon: any; color: string }
     label: "Thẻ ngân hàng",
     icon: CreditCard,
     color: "bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 border-purple-200",
+  },
+  split: {
+    label: "Tiền mặt + Chuyển khoản",
+    icon: WalletCards,
+    color: "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border-amber-200 dark:border-amber-800",
   },
 };
 
@@ -106,10 +113,10 @@ export default async function SaleDetailPage({
     thuc_thu: sale.paid,
     con_no: due,
     ten_nhan_vien: sale.user?.name || "Nhân viên",
-    ghi_chu: sale.note || "",
+    ghi_chu: stripSplitTag(sale.note || ""),
     bank_id: settings.bankId,
     bank_account: settings.bankAccount,
-    payment_method: payInfo.label,
+    payment_method: formatPaymentMethodDisplay(sale.paymentMethod, sale.note),
     items: sale.items.map((item) => ({
       ten: item.product.name,
       sl: item.quantity,

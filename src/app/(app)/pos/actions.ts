@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { nextSaleCode, nextCustomerCode } from "@/lib/code-sequence";
+import { formatSplitNote } from "@/lib/payment-utils";
 
 type Item = {
   productId: string;
@@ -20,6 +21,8 @@ export async function createSale(input: {
   paymentMethod: string;
   discount: number;
   note: string;
+  splitCash?: number;
+  splitTransfer?: number;
 }) {
   try {
     const session = await requireSession();
@@ -78,6 +81,10 @@ export async function createSale(input: {
     );
     const total = Math.max(0, subtotal - (input.discount || 0));
 
+    const finalNote = input.paymentMethod === "split"
+      ? formatSplitNote(input.note, input.splitCash ?? 0, input.splitTransfer ?? 0)
+      : (input.note || null);
+
     const sale = await prisma.$transaction(async (tx) => {
       const code = await nextSaleCode(tx);
       const created = await tx.sale.create({
@@ -89,7 +96,7 @@ export async function createSale(input: {
           paid: total,
           paymentMethod: input.paymentMethod,
           status: "paid",
-          note: input.note || null,
+          note: finalNote,
           customerId: resolvedCustomerId,
           userId: session.id,
           items: {

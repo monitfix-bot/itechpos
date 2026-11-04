@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { formatSplitNote } from "@/lib/payment-utils";
 import { requireSession } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { createNotification, notifyAdmins } from "@/lib/notifications";
@@ -374,6 +375,8 @@ export async function deliverService(input: {
   warranty: number;
   solution: string;
   note: string;
+  splitCash?: number;
+  splitTransfer?: number;
 }) {
   try {
     const session = await requireSession();
@@ -429,6 +432,10 @@ export async function deliverService(input: {
       });
       const finalCost = allItems.reduce((s, i) => s + i.subtotal, 0);
 
+      const finalNote = input.paymentMethod === "split"
+        ? formatSplitNote(input.note || ticket.note, input.splitCash ?? 0, input.splitTransfer ?? 0)
+        : (input.note || ticket.note);
+
       await tx.serviceTicket.update({
         where: { id: ticket.id },
         data: {
@@ -438,7 +445,7 @@ export async function deliverService(input: {
           paymentMethod: input.paymentMethod,
           warranty: input.warranty,
           solution: input.solution || ticket.solution,
-          note: input.note || ticket.note,
+          note: finalNote,
           completedAt: ticket.completedAt || new Date(),
           deliveredAt: new Date(),
         },

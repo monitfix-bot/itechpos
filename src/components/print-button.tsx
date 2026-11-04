@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export function PrintButton({ label = "In" }: { label?: string }) {
+export function PrintButton({ label = "In phiếu" }: { label?: string }) {
   const params = useSearchParams();
   const auto = params.get("print") === "1";
   const fired = useRef(false);
@@ -13,24 +13,28 @@ export function PrintButton({ label = "In" }: { label?: string }) {
   useEffect(() => {
     if (!auto || fired.current) return;
     fired.current = true;
-    
+
     const t = setTimeout(() => {
-      // Add event listener to close the window after printing/cancelling
       window.onafterprint = () => {
-        // Delay slightly before closing to ensure system processes are done
         setTimeout(() => window.close(), 500);
       };
-      
       window.print();
-    }, 800); // Slightly longer delay to ensure full rendering in new tab
-    
+    }, 800);
+
     return () => clearTimeout(t);
   }, [auto]);
 
   return (
-    <Button variant="outline" onClick={() => window.print()}>
-      <Printer className="size-4" />
-      {label}
+    <Button
+      type="button"
+      onClick={() => window.print()}
+      className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md shadow-blue-500/25 px-4 h-8 text-xs flex items-center gap-1.5 transition-all active:scale-95"
+    >
+      <Printer className="size-3.5" />
+      <span>{label}</span>
+      <kbd className="hidden sm:inline-block ml-1 text-[10px] px-1.5 py-0.5 rounded bg-blue-700/60 text-blue-100 font-mono font-medium">
+        Ctrl+P
+      </kbd>
     </Button>
   );
 }

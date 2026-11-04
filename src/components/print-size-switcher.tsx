@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { FileText, Receipt } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function PrintSizeSwitcher({ current }: { current: string }) {
   const router = useRouter();
@@ -14,26 +15,36 @@ export function PrintSizeSwitcher({ current }: { current: string }) {
     router.replace(`${pathname}?${params.toString()}`);
   }
 
+  const isA4 = current !== "80mm";
+
   return (
-    <div className="inline-flex rounded-md border overflow-hidden">
-      <Button
+    <div className="inline-flex rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100/90 dark:bg-slate-900/90 p-1 shadow-xs">
+      <button
         type="button"
-        variant={current === "A4" ? "default" : "ghost"}
-        size="sm"
-        className="rounded-none h-8 px-2.5 text-xs"
         onClick={() => setSize("A4")}
+        className={cn(
+          "px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5",
+          isA4
+            ? "bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs"
+            : "text-muted-foreground hover:text-foreground"
+        )}
       >
-        A4
-      </Button>
-      <Button
+        <FileText className="size-3.5" />
+        <span>Khổ A4</span>
+      </button>
+      <button
         type="button"
-        variant={current === "80mm" ? "default" : "ghost"}
-        size="sm"
-        className="rounded-none h-8 px-2.5 text-xs"
         onClick={() => setSize("80mm")}
+        className={cn(
+          "px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5",
+          !isA4
+            ? "bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs"
+            : "text-muted-foreground hover:text-foreground"
+        )}
       >
-        80mm
-      </Button>
+        <Receipt className="size-3.5" />
+        <span>K80 (80mm)</span>
+      </button>
     </div>
   );
 }

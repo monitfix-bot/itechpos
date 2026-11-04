@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { formatVND, formatNumber } from "@/lib/format";
+import { parseSplitPayment } from "@/lib/payment-utils";
 import {
   TrendingUp,
   ShoppingCart,
@@ -43,6 +44,7 @@ const PAYMENT_LABELS: Record<string, string> = {
   card: "Thẻ",
   transfer: "Chuyển khoản",
   wallet: "Ví ĐT",
+  split: "Tiền mặt + Chuyển khoản",
 };
 
 export default async function ReportsPage({
@@ -131,6 +133,7 @@ async function ShiftsTab({ date }: { date: string }) {
       customerName: s.customer?.name ?? null,
       paymentMethod: s.paymentMethod,
       total: s.total,
+      note: s.note,
     });
     grouped.set(s.userId, arr);
   }
@@ -145,6 +148,7 @@ async function ShiftsTab({ date }: { date: string }) {
       customerName: t.customer?.name ?? null,
       paymentMethod: t.paymentMethod || "cash",
       total: t.finalCost,
+      note: t.note,
     });
     grouped.set(uid, arr);
   }
@@ -164,20 +168,40 @@ async function ShiftsTab({ date }: { date: string }) {
 
   const total = sales.reduce((s, x) => s + x.total, 0) +
     tickets.reduce((s, x) => s + x.finalCost, 0);
+  let cashFromSplit = 0;
+  let transferFromSplit = 0;
+  for (const s of sales) {
+    if (s.paymentMethod === "split") {
+      const sp = parseSplitPayment(s.note, s.total);
+      cashFromSplit += sp.cash;
+      transferFromSplit += sp.transfer;
+    }
+  }
+  for (const t of tickets) {
+    if (t.paymentMethod === "split") {
+      const sp = parseSplitPayment(t.note, t.finalCost);
+      cashFromSplit += sp.cash;
+      transferFromSplit += sp.transfer;
+    }
+  }
+
   const cashTotal =
     sales
       .filter((s) => s.paymentMethod === "cash")
       .reduce((s, x) => s + x.total, 0) +
     tickets
       .filter((t) => (t.paymentMethod || "cash") === "cash")
-      .reduce((s, x) => s + x.finalCost, 0);
+      .reduce((s, x) => s + x.finalCost, 0) +
+    cashFromSplit;
+
   const transferTotal =
     sales
       .filter((s) => s.paymentMethod === "transfer")
       .reduce((s, x) => s + x.total, 0) +
     tickets
       .filter((t) => t.paymentMethod === "transfer")
-      .reduce((s, x) => s + x.finalCost, 0);
+      .reduce((s, x) => s + x.finalCost, 0) +
+    transferFromSplit;
 
   return (
     <div className="space-y-6">

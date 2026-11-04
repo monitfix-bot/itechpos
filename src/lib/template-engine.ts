@@ -1,4 +1,5 @@
 import { formatVND, formatDate, formatTime, formatDateTime } from "./format";
+import { formatPaymentMethodDisplay, stripSplitTag } from "./payment-utils";
 
 export type TemplateData = {
   // General
@@ -245,8 +246,11 @@ export function renderTemplate(
     con_no: data.con_no || 0,
     
     // Notes & Payment
-    ghi_chu: data.ghi_chu || "",
-    payment_method: data.payment_method || data.paymentMethod || "",
+    ghi_chu: stripSplitTag(data.ghi_chu || ""),
+    payment_method: formatPaymentMethodDisplay(
+      data.payment_method || data.paymentMethod || "",
+      data.ghi_chu
+    ),
   };
 
   // 1. KiotViet-style Product Loop: Auto-repeat any <tr> containing item variables
@@ -381,6 +385,8 @@ export function renderTemplate(
     "{ghi_chu}": merged.ghi_chu,
     "{sanpham}": itemsTableHtml,
     "{payment_method}": merged.payment_method,
+    "{phuong_thuc_thanh_toan}": merged.payment_method,
+    "{hinh_thuc_thanh_toan}": merged.payment_method,
     "{qr}": qrHtml,
   };
 

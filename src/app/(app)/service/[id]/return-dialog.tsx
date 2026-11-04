@@ -19,7 +19,8 @@ import {
 import { SelectField } from "@/components/ui/select-field";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, PackageCheck, Plus, Trash2, Search } from "lucide-react";
+import { Loader2, PackageCheck, Plus, Trash2, Search, Banknote, QrCode, WalletCards } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { formatVND } from "@/lib/format";
 import { printInBackground } from "@/lib/print";
 import { deliverService } from "../actions";
@@ -51,7 +52,8 @@ type ExtraDraft = {
 
 const PAYMENT_OPTIONS = [
   { value: "cash", label: "Tiền mặt" },
-  { value: "transfer", label: "Chuyển khoản" },
+  { value: "transfer", label: "Chuyển khoản VietQR" },
+  { value: "split", label: "Kết hợp (Tiền mặt + Chuyển khoản)" },
 ];
 
 export function ReturnDialog({
@@ -91,6 +93,8 @@ export function ReturnDialog({
   const [solution, setSolution] = useState("");
   const [warranty, setWarranty] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("cash");
+  const [splitCash, setSplitCash] = useState<string>("");
+  const [splitTransfer, setSplitTransfer] = useState<string>("");
   const [productPicker, setProductPicker] = useState("");
   const [showPicker, setShowPicker] = useState(false);
 
@@ -150,6 +154,29 @@ export function ReturnDialog({
     setExtras((curr) => curr.filter((x) => x.id !== id));
   }
 
+  function handlePaymentMethodChange(val: string) {
+    setPaymentMethod(val);
+    if (val === "split" && !splitCash && !splitTransfer) {
+      const half = Math.round(paidThisTime / 2);
+      setSplitCash(String(half));
+      setSplitTransfer(String(paidThisTime - half));
+    }
+  }
+
+  function handleSplitCashChange(val: string) {
+    setSplitCash(val);
+    const num = Number(val) || 0;
+    const rem = Math.max(0, paidThisTime - num);
+    setSplitTransfer(String(rem));
+  }
+
+  function handleSplitTransferChange(val: string) {
+    setSplitTransfer(val);
+    const num = Number(val) || 0;
+    const rem = Math.max(0, paidThisTime - num);
+    setSplitCash(String(rem));
+  }
+
   const validExtras = extras.filter(
     (x) => x.description.trim() && x.quantity > 0,
   );
@@ -183,6 +210,8 @@ export function ReturnDialog({
         warranty: Number(warranty) || 0,
         solution: solution.trim(),
         note: "",
+        splitCash: paymentMethod === "split" ? (Number(splitCash) || 0) : undefined,
+        splitTransfer: paymentMethod === "split" ? (Number(splitTransfer) || 0) : undefined,
       });
       if (res.ok) {
         toast.success(`Đã trả máy phiếu ${ticketCode}`);
@@ -427,7 +456,7 @@ export function ReturnDialog({
               <Label className="text-xs">Phương thức</Label>
               <SelectField
                 value={paymentMethod}
-                onValueChange={setPaymentMethod}
+                onValueChange={handlePaymentMethodChange}
                 options={PAYMENT_OPTIONS}
                 className="w-full"
               />
@@ -454,6 +483,98 @@ export function ReturnDialog({
               />
             </div>
           </div>
+
+          {paymentMethod === "split" && (
+            <div className="p-3.5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-900/60 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-blue-700 dark:text-blue-300">
+                  <WalletCards className="w-4 h-4" />
+                  <span>Phân bổ (Tiền mặt + Chuyển khoản)</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const half = Math.round(paidThisTime / 2);
+                      setSplitCash(String(half));
+                      setSplitTransfer(String(paidThisTime - half));
+                    }}
+                    className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-300 hover:bg-blue-50"
+                  >
+                    50 / 50
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSplitCash(String(paidThisTime));
+                      setSplitTransfer("0");
+                    }}
+                    className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-300 hover:bg-blue-50"
+                  >
+                    100% TM
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSplitCash("0");
+                      setSplitTransfer(String(paidThisTime));
+                    }}
+                    className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-300 hover:bg-blue-50"
+                  >
+                    100% CK
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                    <Banknote className="w-3.5 h-3.5 text-emerald-600" />
+                    Tiền mặt (VNĐ)
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    step={1000}
+                    value={splitCash}
+                    onChange={(e) => handleSplitCashChange(e.target.value)}
+                    placeholder="0"
+                    className="w-full px-3 py-2 text-xs font-mono font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                    <QrCode className="w-3.5 h-3.5 text-blue-600" />
+                    Chuyển khoản (VNĐ)
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    step={1000}
+                    value={splitTransfer}
+                    onChange={(e) => handleSplitTransferChange(e.target.value)}
+                    placeholder="0"
+                    className="w-full px-3 py-2 text-xs font-mono font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-[11px] pt-1 border-t border-blue-200/60 dark:border-blue-900/40">
+                <span className="text-slate-500 dark:text-slate-400">Tổng khớp đợt này:</span>
+                <span
+                  className={cn(
+                    "font-mono font-bold",
+                    (Number(splitCash) || 0) + (Number(splitTransfer) || 0) === paidThisTime
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-amber-600 dark:text-amber-400"
+                  )}
+                >
+                  {formatVND((Number(splitCash) || 0) + (Number(splitTransfer) || 0))} / {formatVND(paidThisTime)}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         <DialogFooter className="gap-2 sm:gap-2">

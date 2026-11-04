@@ -15,6 +15,7 @@ import {
   Banknote,
   CreditCard,
   Wallet,
+  WalletCards,
   Printer,
   Eye,
   Filter,
@@ -30,6 +31,7 @@ const PAYMENT_LABELS: Record<string, string> = {
   card: "Thẻ NH",
   transfer: "VietQR",
   wallet: "Ví ĐT",
+  split: "Tiền mặt + CK",
 };
 
 const PAYMENT_ICONS: Record<string, any> = {
@@ -37,6 +39,7 @@ const PAYMENT_ICONS: Record<string, any> = {
   card: CreditCard,
   transfer: Wallet,
   wallet: Wallet,
+  split: WalletCards,
 };
 
 export type InvoiceRow = {
