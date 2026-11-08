@@ -23,7 +23,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -166,7 +165,7 @@ export function PortalHeader({
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2 shadow-xl">
-              <DropdownMenuLabel className="font-normal px-2 py-1.5">
+              <div className="px-2.5 py-2 mb-1 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/60">
                 <div className="text-xs font-bold text-foreground">{user.name}</div>
                 <div className="text-[11px] text-muted-foreground font-mono truncate">
                   {user.email}
@@ -177,7 +176,7 @@ export function PortalHeader({
                     Quản trị viên
                   </Badge>
                 )}
-              </DropdownMenuLabel>
+              </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 render={<a href={posUrl} />}
