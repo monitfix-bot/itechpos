@@ -104,7 +104,7 @@ export function AttendanceClient({
     return () => clearInterval(timer);
   }, []);
 
-  // Get GPS function
+  // Get GPS function with smart high-accuracy -> standard fallback
   function getGpsLocation() {
     if (!navigator.geolocation) {
       setGpsError("Trình duyệt không hỗ trợ Geolocation");
@@ -113,33 +113,47 @@ export function AttendanceClient({
     setLoadingGps(true);
     setGpsError(null);
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const userLat = pos.coords.latitude;
-        const userLng = pos.coords.longitude;
-        setCoords({ lat: userLat, lng: userLng });
-        setLoadingGps(false);
+    const handleSuccess = (pos: GeolocationPosition) => {
+      const userLat = pos.coords.latitude;
+      const userLng = pos.coords.longitude;
+      setCoords({ lat: userLat, lng: userLng });
+      setLoadingGps(false);
+      setGpsError(null);
 
-        if (branch?.latitude && branch?.longitude) {
-          const dist = calculateDistanceMeters(
-            userLat,
-            userLng,
-            branch.latitude,
-            branch.longitude
-          );
-          setCurrentDistance(dist);
-        }
-      },
-      (err) => {
-        setLoadingGps(false);
-        console.warn("GPS error:", err);
-        setGpsError(
-          err.code === 1
-            ? "Vui lòng cho phép quyền truy cập vị trí trên trình duyệt"
-            : "Không thể lấy tín hiệu GPS, vui lòng thử lại"
+      if (branch?.latitude && branch?.longitude) {
+        const dist = calculateDistanceMeters(
+          userLat,
+          userLng,
+          branch.latitude,
+          branch.longitude
         );
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        setCurrentDistance(dist);
+      }
+    };
+
+    const handleFallback = (highAccuracyErr: GeolocationPositionError) => {
+      console.warn("High accuracy GPS failed or timed out, trying standard accuracy...", highAccuracyErr);
+      // Fallback to standard accuracy (resolves quickly via Wi-Fi / IP triangulation on laptops/PCs)
+      navigator.geolocation.getCurrentPosition(
+        handleSuccess,
+        (fallbackErr) => {
+          setLoadingGps(false);
+          console.warn("Standard GPS also failed:", fallbackErr);
+          setGpsError(
+            fallbackErr.code === 1
+              ? "Vui lòng cho phép quyền truy cập vị trí trên trình duyệt"
+              : "Không thể lấy tín hiệu định vị. Vui lòng thử lại hoặc kết nối Wi-Fi."
+          );
+        },
+        { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+      );
+    };
+
+    // Try high-accuracy first with short 4s timeout
+    navigator.geolocation.getCurrentPosition(
+      handleSuccess,
+      handleFallback,
+      { enableHighAccuracy: true, timeout: 4000, maximumAge: 10000 }
     );
   }
 

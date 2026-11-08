@@ -159,12 +159,6 @@ export function AppHeader({
       icon: Users,
       active: pathname.startsWith("/customers"),
     },
-    {
-      title: "Chấm công",
-      url: "/attendance",
-      icon: Clock,
-      active: pathname.startsWith("/attendance"),
-    },
   ];
 
   // Secondary menu navigation
@@ -176,7 +170,6 @@ export function AppHeader({
   ];
 
   if (user.role === "admin") {
-    secondaryNav.push({ title: "Bảng chấm công nhân sự", url: "/attendance/manage", icon: Clock });
     secondaryNav.push({ title: "Quản lý nhân sự & Kỹ thuật", url: "/users", icon: Users });
     secondaryNav.push({ title: "Cấu hình cửa hàng & Mẫu in", url: "/settings", icon: Settings });
   }

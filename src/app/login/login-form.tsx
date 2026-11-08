@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { loginAction } from "./actions";
 import { Loader2, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { playPosSound } from "@/lib/sound";
+import { isAppSubdomain } from "@/lib/domain";
 
 export function LoginForm() {
   const router = useRouter();
@@ -22,7 +23,9 @@ export function LoginForm() {
       if (res.ok) {
         playPosSound("success");
         toast.success("Đăng nhập thành công!");
-        const from = searchParams.get("from") || "/pos";
+        const isApp = typeof window !== "undefined" && isAppSubdomain(window.location.host);
+        const defaultFrom = isApp ? "/" : "/pos";
+        const from = searchParams.get("from") || defaultFrom;
         router.push(from);
         router.refresh();
       } else {

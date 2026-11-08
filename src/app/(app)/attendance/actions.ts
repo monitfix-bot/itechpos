@@ -72,29 +72,34 @@ export async function checkInAction(input: {
     let distance: number | null = null;
     const allowedRadius = branch?.radiusMeters || settings.defaultGpsRadius || 150;
 
-    if (branch?.latitude && branch?.longitude) {
-      if (typeof input.lat !== "number" || typeof input.lng !== "number") {
-        return {
-          ok: false as const,
-          error: "Không nhận được tọa độ GPS. Vui lòng cho phép trình duyệt truy cập vị trí.",
-        };
-      }
+    if (!branch?.latitude || !branch?.longitude) {
+      return {
+        ok: false as const,
+        error: "Cửa hàng chưa được cấu hình tọa độ GPS. Vui lòng vào mục Cài đặt để cập nhật vị trí cửa hàng trước khi chấm công.",
+      };
+    }
 
-      distance = calculateDistanceMeters(
-        input.lat,
-        input.lng,
-        branch.latitude,
-        branch.longitude
-      );
+    if (typeof input.lat !== "number" || typeof input.lng !== "number") {
+      return {
+        ok: false as const,
+        error: "Không nhận được tọa độ GPS. Vui lòng cho phép trình duyệt truy cập vị trí.",
+      };
+    }
 
-      if (distance > allowedRadius) {
-        return {
-          ok: false as const,
-          error: `Bạn đang ở cách ${branch.name} ${formatDistance(distance)}. Bán kính cho phép chấm công là ${allowedRadius}m.`,
-          distance,
-          allowedRadius,
-        };
-      }
+    distance = calculateDistanceMeters(
+      input.lat,
+      input.lng,
+      branch.latitude,
+      branch.longitude
+    );
+
+    if (distance > allowedRadius) {
+      return {
+        ok: false as const,
+        error: `Bạn đang ở cách ${branch.name} ${formatDistance(distance)}. Bán kính cho phép chấm công là ${allowedRadius}m.`,
+        distance,
+        allowedRadius,
+      };
     }
 
     const now = new Date();

@@ -109,7 +109,6 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
 
   const tabs = [
     { id: "general", label: "Cửa hàng", icon: Store, desc: "Thông tin cơ bản & liên hệ" },
-    { id: "attendance", label: "Chấm công & Ca làm", icon: Clock, desc: "Giờ làm, đi muộn, công tháng" },
     { id: "appearance", label: "Giao diện & Màu sắc", icon: Palette, desc: "Màu chủ đạo toàn hệ thống" },
     { id: "print", label: "In ấn & Thời gian", icon: Printer, desc: "Đồng bộ múi giờ & mẫu in" },
     { id: "payment", label: "Thanh toán", icon: CreditCard, desc: "Ngân hàng & VietQR" },
