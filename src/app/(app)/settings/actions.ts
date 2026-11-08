@@ -25,6 +25,11 @@ export async function updateSettings(data: {
   bankId: string;
   bankAccount: string;
   bankAccountName: string;
+  workStartTime?: string;
+  workEndTime?: string;
+  allowedLateMinutesPerMonth?: number | string;
+  standardWorkingDaysPerMonth?: number | string;
+  defaultGpsRadius?: number | string;
 }) {
   try {
     if (!(await requireAdmin())) {
@@ -43,6 +48,11 @@ export async function updateSettings(data: {
       bankId: data.bankId || null,
       bankAccount: data.bankAccount || null,
       bankAccountName: data.bankAccountName || null,
+      workStartTime: data.workStartTime || "08:00",
+      workEndTime: data.workEndTime || "17:30",
+      allowedLateMinutesPerMonth: Number(data.allowedLateMinutesPerMonth) || 60,
+      standardWorkingDaysPerMonth: Number(data.standardWorkingDaysPerMonth) || 26,
+      defaultGpsRadius: Number(data.defaultGpsRadius) || 150,
     };
 
     await prisma.appSetting.upsert({

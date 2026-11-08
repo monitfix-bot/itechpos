@@ -30,7 +30,7 @@ import { updateSettings, uploadAsset, clearAsset } from "./actions";
 import { cn } from "@/lib/utils";
 import { formatDate, formatTime, formatDateTime } from "@/lib/format";
 
-type TabType = "general" | "appearance" | "print" | "payment" | "assets";
+type TabType = "general" | "attendance" | "appearance" | "print" | "payment" | "assets";
 
 export function SettingsForm({ initial }: { initial: AppSettings }) {
   const router = useRouter();
@@ -59,6 +59,11 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
     bankId: initial.bankId ?? "",
     bankAccount: initial.bankAccount ?? "",
     bankAccountName: initial.bankAccountName ?? "",
+    workStartTime: initial.workStartTime || "08:00",
+    workEndTime: initial.workEndTime || "17:30",
+    allowedLateMinutesPerMonth: String(initial.allowedLateMinutesPerMonth ?? 60),
+    standardWorkingDaysPerMonth: String(initial.standardWorkingDaysPerMonth ?? 26),
+    defaultGpsRadius: String(initial.defaultGpsRadius ?? 150),
   });
 
   // Ticker for live time preview
@@ -104,6 +109,7 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
 
   const tabs = [
     { id: "general", label: "Cửa hàng", icon: Store, desc: "Thông tin cơ bản & liên hệ" },
+    { id: "attendance", label: "Chấm công & Ca làm", icon: Clock, desc: "Giờ làm, đi muộn, công tháng" },
     { id: "appearance", label: "Giao diện & Màu sắc", icon: Palette, desc: "Màu chủ đạo toàn hệ thống" },
     { id: "print", label: "In ấn & Thời gian", icon: Printer, desc: "Đồng bộ múi giờ & mẫu in" },
     { id: "payment", label: "Thanh toán", icon: CreditCard, desc: "Ngân hàng & VietQR" },

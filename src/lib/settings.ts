@@ -226,6 +226,11 @@ export type AppSettings = {
   bankId: string | null;
   bankAccount: string | null;
   bankAccountName: string | null;
+  workStartTime: string;
+  workEndTime: string;
+  allowedLateMinutesPerMonth: number;
+  standardWorkingDaysPerMonth: number;
+  defaultGpsRadius: number;
 };
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -243,6 +248,11 @@ export const DEFAULT_SETTINGS: AppSettings = {
   bankId: null,
   bankAccount: null,
   bankAccountName: null,
+  workStartTime: "08:00",
+  workEndTime: "17:30",
+  allowedLateMinutesPerMonth: 60,
+  standardWorkingDaysPerMonth: 26,
+  defaultGpsRadius: 150,
 };
 
 export async function getSettings(): Promise<AppSettings> {
@@ -268,6 +278,11 @@ export async function getSettings(): Promise<AppSettings> {
       bankId: s.bankId ?? null,
       bankAccount: s.bankAccount ?? null,
       bankAccountName: s.bankAccountName ?? null,
+      workStartTime: (s as any).workStartTime || "08:00",
+      workEndTime: (s as any).workEndTime || "17:30",
+      allowedLateMinutesPerMonth: (s as any).allowedLateMinutesPerMonth ?? 60,
+      standardWorkingDaysPerMonth: (s as any).standardWorkingDaysPerMonth ?? 26,
+      defaultGpsRadius: (s as any).defaultGpsRadius ?? 150,
     };
   } catch {
     return DEFAULT_SETTINGS;

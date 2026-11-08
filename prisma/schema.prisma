@@ -20,6 +20,9 @@ model Branch {
   address   String?
   phone     String?
   isMain    Boolean  @default(false)
+  latitude  Float?
+  longitude Float?
+  radiusMeters Int   @default(150)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -29,6 +32,7 @@ model Branch {
   stockMovements StockMovement[]
   productStocks  ProductBranchStock[]
   sessions       Session[]
+  attendances    Attendance[]
 }
 
 // ============================================
@@ -51,6 +55,13 @@ model AppSetting {
   timezone        String   @default("Asia/Ho_Chi_Minh")
   themeColor      String   @default("blue")
   updatedAt       DateTime @updatedAt
+
+  // Attendance and Shift Rules
+  workStartTime               String   @default("08:00")
+  workEndTime                 String   @default("17:30")
+  allowedLateMinutesPerMonth  Int      @default(60)
+  standardWorkingDaysPerMonth Int      @default(26)
+  defaultGpsRadius            Int      @default(150)
 
   // Atomic counters for human-readable codes
   lastSaleNumber     Int @default(0)
@@ -86,6 +97,7 @@ model User {
   serviceAssigned ServiceTicket[] @relation("AssignedTo")
   stockMovements  StockMovement[]
   notifications   Notification[]
+  attendances     Attendance[]
 }
 
 // ============================================
@@ -358,4 +370,43 @@ model SystemSetting {
   supportEmail    String   @default("support@mypos.vn")
   maintenanceMode Boolean  @default(false)
   updatedAt       DateTime @updatedAt
+}
+
+
+// ============================================
+// ATTENDANCE & SHIFTS
+// ============================================
+model Attendance {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  branchId  String?
+  branch    Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  date      DateTime // Normalized to 00:00:00 of the shift day
+
+  checkInTime      DateTime
+  checkInLat       Float?
+  checkInLng       Float?
+  checkInDistance  Float?
+
+  checkOutTime     DateTime?
+  checkOutLat      Float?
+  checkOutLng      Float?
+  checkOutDistance Float?
+  earlyReason      String?
+
+  workMinutes Int    @default(0)
+  lateMinutes Int    @default(0)
+  status      String @default("present") // present | late | early_leave | incomplete | adjusted
+  note        String?
+
+  adjustedBy     String?
+  adjustedAt     DateTime?
+  adjustmentNote String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+  @@index([date])
 }
